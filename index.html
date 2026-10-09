@@ -32,13 +32,14 @@
     .deal-badge { position: absolute; top: 8px; left: 8px; background-color: #cc0c39; color: white; font-size: 10px; font-weight: bold; padding: 2px 5px; border-radius: 3px; }
     .product-icon { font-size: 38px; margin: 8px 0; }
     .product-title { font-size: 14px; font-weight: bold; margin-bottom: 5px; }
+    .product-unit { font-size: 11px; color: #666; margin-bottom: 5px; }
     
     .price-box { margin-bottom: 8px; }
     .old-price { text-decoration: line-through; color: #777; font-size: 11px; margin-right: 5px; }
     .current-price { color: #b12704; font-size: 14px; font-weight: bold; }
     
     .qty-box { display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 8px; font-size: 12px; }
-    .qty-box input { width: 60px; padding: 4px; border-radius: 4px; border: 1px solid #ccc; font-weight: bold; text-align: center; }
+    .qty-box select { padding: 3px; border-radius: 4px; border: 1px solid #ccc; font-weight: bold; }
 
     .btn-add { background-color: #ffd814; border: 1px solid #fcd200; border-radius: 20px; padding: 7px; cursor: pointer; font-weight: bold; width: 100%; font-size: 13px; }
     .btn-add:hover { background-color: #f7ca00; }
@@ -83,7 +84,7 @@
   <!-- Banner -->
   <div class="hero-banner">
     <h1>Alle Minecraft Blöcke & Items ⛏️</h1>
-    <p>Bezahle nur mit Eisen & Diamanten | Menge frei wählbar von 1 bis 64 Stück!</p>
+    <p>Bezahle nur mit Eisen & Diamanten | Maximal 5 Stacks/Einheiten pro Bestellung</p>
   </div>
 
   <div class="container">
@@ -119,52 +120,55 @@
   </div>
 
   <script>
+    // Preisangaben nur in Eisen oder Diamanten
     const products = [
       // ERZE & SELTENES
-      { id: 1, name: "Diamanterz", priceNum: 2, curr: "Diamanten", category: "erz", icon: "💎", isDeal: true, oldPrice: "3x Diamanten", dealText: "ANGEBOT" },
-      { id: 2, name: "Netheritingot", priceNum: 8, curr: "Diamanten", category: "erz", icon: "⬛", isDeal: false },
-      { id: 3, name: "Golderz", priceNum: 2, curr: "Eisen", category: "erz", icon: "🪙", isDeal: false },
-      { id: 4, name: "Eisenerz", priceNum: 1, curr: "Eisen", category: "erz", icon: "⚙️", isDeal: false },
-      { id: 5, name: "Lapis Lazuli", priceNum: 1, curr: "Eisen", category: "erz", icon: "🔵", isDeal: false },
-      { id: 6, name: "Quarz", priceNum: 1, curr: "Eisen", category: "erz", icon: "⚪", isDeal: false },
-      { id: 7, name: "Amethyst Splitter", priceNum: 1, curr: "Eisen", category: "erz", icon: "💜", isDeal: false },
+      { id: 1, name: "Diamanterz", priceNum: 2, curr: "Diamanten", unit: "1x Block", category: "erz", icon: "💎", isDeal: true, oldPrice: "3x Diamanten", dealText: "ANGEBOT" },
+      { id: 2, name: "Netheritingot", priceNum: 8, curr: "Diamanten", unit: "1x Ingot", category: "erz", icon: "⬛", isDeal: false },
+      { id: 3, name: "Golderz", priceNum: 4, curr: "Eisen", unit: "16x Blöcke", category: "erz", icon: "🪙", isDeal: false },
+      { id: 4, name: "Eisenerz", priceNum: 2, curr: "Eisen", unit: "32x Blöcke", category: "erz", icon: "⚙️", isDeal: false },
+      { id: 5, name: "Lapis Lazuli", priceNum: 1, curr: "Eisen", unit: "32x Lapis", category: "erz", icon: "🔵", isDeal: false },
+      { id: 6, name: "Quarz", priceNum: 2, curr: "Eisen", unit: "64x Quarz", category: "erz", icon: "⚪", isDeal: false },
+      { id: 7, name: "Amethyst Splitter", priceNum: 3, curr: "Eisen", unit: "16x Splitter", category: "erz", icon: "💜", isDeal: false },
 
       // BAUSTOFFE
-      { id: 8, name: "Obsidian", priceNum: 2, curr: "Eisen", category: "bau", icon: "🔮", isDeal: true, oldPrice: "4x Eisen", dealText: "50% RABATT" },
-      { id: 9, name: "Eichenholz Stamm", priceNum: 1, curr: "Eisen", category: "bau", icon: "🪵", isDeal: false },
-      { id: 10, name: "Bruchstein (Cobblestone)", priceNum: 1, curr: "Eisen", category: "bau", icon: "🪨", isDeal: false },
-      { id: 11, name: "Ziegelstein Block", priceNum: 1, curr: "Eisen", category: "bau", icon: "🧱", isDeal: false },
-      { id: 12, name: "Glas", priceNum: 1, curr: "Eisen", category: "bau", icon: "🪟", isDeal: false },
-      { id: 13, name: "Netherrack", priceNum: 1, curr: "Eisen", category: "bau", icon: "🔥", isDeal: false },
-      { id: 14, name: "Endstein", priceNum: 2, curr: "Eisen", category: "bau", icon: "🟡", isDeal: false },
-      { id: 15, name: "Seelen-Sand", priceNum: 1, curr: "Eisen", category: "bau", icon: "🤎", isDeal: false },
+      { id: 8, name: "Obsidian", priceNum: 4, curr: "Eisen", unit: "16x Blöcke", category: "bau", icon: "🔮", isDeal: true, oldPrice: "8x Eisen", dealText: "50% RABATT" },
+      { id: 9, name: "Eichenholz Stamm", priceNum: 1, curr: "Eisen", unit: "64x Stämme", category: "bau", icon: "🪵", isDeal: false },
+      { id: 10, name: "Bruchstein (Cobblestone)", priceNum: 1, curr: "Eisen", unit: "64x Blöcke", category: "bau", icon: "🪨", isDeal: false },
+      { id: 11, name: "Ziegelstein Block", priceNum: 2, curr: "Eisen", unit: "32x Blöcke", category: "bau", icon: "🧱", isDeal: false },
+      { id: 12, name: "Glas", priceNum: 1, curr: "Eisen", unit: "64x Blöcke", category: "bau", icon: "🪟", isDeal: false },
+      { id: 13, name: "Netherrack", priceNum: 1, curr: "Eisen", unit: "64x Blöcke", category: "bau", icon: "🔥", isDeal: false },
+      { id: 14, name: "Endstein", priceNum: 3, curr: "Eisen", unit: "32x Blöcke", category: "bau", icon: "🟡", isDeal: false },
+      { id: 15, name: "Seelen-Sand", priceNum: 2, curr: "Eisen", unit: "32x Blöcke", category: "bau", icon: "🤎", isDeal: false },
+      { id: 16, name: "Marmor / Quarzblock", priceNum: 4, curr: "Eisen", unit: "16x Blöcke", category: "bau", icon: "🏛️", isDeal: false },
 
       // AUSRÜSTUNG & WERKZEUGE
-      { id: 17, name: "Netherit Spitzhacke", priceNum: 12, curr: "Diamanten", category: "tools", icon: "⛏️", isDeal: true, oldPrice: "16x Diamanten", dealText: "TOP DEAL" },
-      { id: 18, name: "Diamantschwert", priceNum: 3, curr: "Diamanten", category: "tools", icon: "⚔️", isDeal: false },
-      { id: 19, name: "Diamant Brustpanzer", priceNum: 8, curr: "Diamanten", category: "tools", icon: "👕", isDeal: false },
-      { id: 20, name: "Bogen & Pfeile", priceNum: 3, curr: "Eisen", category: "tools", icon: "🏹", isDeal: false },
-      { id: 21, name: "Elytra", priceNum: 15, curr: "Diamanten", category: "tools", icon: "🪽", isDeal: true, oldPrice: "20x Diamanten", dealText: "SELTEN" },
-      { id: 22, name: "Dreizack (Trident)", priceNum: 10, curr: "Diamanten", category: "tools", icon: "🔱", isDeal: false },
+      { id: 17, name: "Netherit Spitzhacke", priceNum: 12, curr: "Diamanten", unit: "1x Werkzeug", category: "tools", icon: "⛏️", isDeal: true, oldPrice: "16x Diamanten", dealText: "TOP DEAL" },
+      { id: 18, name: "Diamantschwert", priceNum: 3, curr: "Diamanten", unit: "1x Waffe", category: "tools", icon: "⚔️", isDeal: false },
+      { id: 19, name: "Diamant Brustpanzer", priceNum: 8, curr: "Diamanten", unit: "1x Rüstung", category: "tools", icon: "👕", isDeal: false },
+      { id: 20, name: "Bogen & 64 Pfeile", priceNum: 3, curr: "Eisen", unit: "Set", category: "tools", icon: "🏹", isDeal: false },
+      { id: 21, name: "Elytra", priceNum: 15, curr: "Diamanten", unit: "1x Elytra", category: "tools", icon: "🪽", isDeal: true, oldPrice: "20x Diamanten", dealText: "SELTEN" },
+      { id: 22, name: "Dreizack (Trident)", priceNum: 10, curr: "Diamanten", unit: "1x Dreizack", category: "tools", icon: "🔱", isDeal: false },
 
       // REDSTONE
-      { id: 23, name: "Redstone Staub", priceNum: 1, curr: "Eisen", category: "redstone", icon: "🔴", isDeal: false },
-      { id: 24, name: "Kolben (Piston)", priceNum: 2, curr: "Eisen", category: "redstone", icon: "📦", isDeal: false },
-      { id: 25, name: "Klebriger Kolben", priceNum: 3, curr: "Eisen", category: "redstone", icon: "🟢", isDeal: false },
-      { id: 26, name: "Trichter (Hopper)", priceNum: 3, curr: "Eisen", category: "redstone", icon: "🔻", isDeal: false },
-      { id: 27, name: "Beobachter (Observer)", priceNum: 2, curr: "Eisen", category: "redstone", icon: "👁️", isDeal: false },
+      { id: 23, name: "Redstone Staub", priceNum: 1, curr: "Eisen", unit: "64x Redstone", category: "redstone", icon: "🔴", isDeal: false },
+      { id: 24, name: "Kolben (Piston)", priceNum: 2, curr: "Eisen", unit: "8x Kolben", category: "redstone", icon: "📦", isDeal: false },
+      { id: 25, name: "Klebriger Kolben", priceNum: 4, curr: "Eisen", unit: "8x Kolben", category: "redstone", icon: "🟢", isDeal: false },
+      { id: 26, name: "Trichter (Hopper)", priceNum: 5, curr: "Eisen", unit: "4x Trichter", category: "redstone", icon: "🔻", isDeal: false },
+      { id: 27, name: "Beobachter (Observer)", priceNum: 3, curr: "Eisen", unit: "8x Observer", category: "redstone", icon: "👁️", isDeal: false },
 
       // NAHRUNG & TRÄNKE
-      { id: 28, name: "Goldener Apfel", priceNum: 2, curr: "Diamanten", category: "food", icon: "🍏", isDeal: false },
-      { id: 29, name: "Gebratenes Rindfleisch", priceNum: 1, curr: "Eisen", category: "food", icon: "🥩", isDeal: false },
-      { id: 30, name: "Zaubertrank der Heilung", priceNum: 2, curr: "Eisen", category: "food", icon: "🧪", isDeal: false },
-      { id: 31, name: "Brot", priceNum: 1, curr: "Eisen", category: "food", icon: "🍞", isDeal: false },
+      { id: 28, name: "Goldener Apfel", priceNum: 2, curr: "Diamanten", unit: "4x Äpfel", category: "food", icon: "🍏", isDeal: false },
+      { id: 29, name: "Gebratenes Rindfleisch", priceNum: 1, curr: "Eisen", unit: "64x Steaks", category: "food", icon: "🥩", isDeal: false },
+      { id: 30, name: "Zaubertrank der Heilung", priceNum: 2, curr: "Eisen", unit: "3x Tränke", category: "food", icon: "🧪", isDeal: false },
+      { id: 31, name: "Brot", priceNum: 1, curr: "Eisen", unit: "64x Brote", category: "food", icon: "🍞", isDeal: false },
 
       // MOB DROPS & SONSTIGES
-      { id: 32, name: "Enderperle", priceNum: 1, curr: "Eisen", category: "mob", icon: "🔮", isDeal: false },
-      { id: 33, name: "Lohenrute (Blaze Rod)", priceNum: 2, curr: "Eisen", category: "mob", icon: "🔥", isDeal: false },
-      { id: 34, name: "Schleimball", priceNum: 1, curr: "Eisen", category: "mob", icon: "🟢", isDeal: false },
-      { id: 35, name: "Totem der Unsterblichkeit", priceNum: 5, curr: "Diamanten", category: "mob", icon: "🗿", isDeal: true, oldPrice: "8x Diamanten", dealText: "RETTUNG" }
+      { id: 32, name: "Enderperle", priceNum: 2, curr: "Eisen", unit: "16x Perlen", category: "mob", icon: "🔮", isDeal: false },
+      { id: 33, name: "Lohenrute (Blaze Rod)", priceNum: 3, curr: "Eisen", unit: "8x Ruten", category: "mob", icon: "🔥", isDeal: false },
+      { id: 34, name: "Schleimball", priceNum: 2, curr: "Eisen", unit: "16x Bälle", category: "mob", icon: "🟢", isDeal: false },
+      { id: 35, name: "Totem der Unsterblichkeit", priceNum: 5, curr: "Diamanten", unit: "1x Totem", category: "mob", icon: "🗿", isDeal: true, oldPrice: "8x Diamanten", dealText: "RETTUNG" },
+      { id: 36, name: "Sattel", priceNum: 2, curr: "Eisen", unit: "1x Sattel", category: "mob", icon: "🏇", isDeal: false }
     ];
 
     let cart = [];
@@ -185,7 +189,7 @@
         card.className = 'product-card';
 
         let badge = p.isDeal ? `<div class="deal-badge">${p.dealText}</div>` : '';
-        let priceStr = `${p.priceNum}x ${p.curr} / Stk.`;
+        let priceStr = `${p.priceNum}x ${p.curr}`;
         let priceHTML = p.oldPrice 
           ? `<span class="old-price">${p.oldPrice}</span><span class="current-price">${priceStr}</span>` 
           : `<span class="current-price">${priceStr}</span>`;
@@ -195,12 +199,19 @@
           <div>
             <div class="product-icon">${p.icon}</div>
             <div class="product-title">${p.name}</div>
+            <div class="product-unit">Menge: ${p.unit}</div>
             <div class="price-box">${priceHTML}</div>
           </div>
           <div>
             <div class="qty-box">
-              <label for="qty-${p.id}">Menge:</label>
-              <input type="number" id="qty-${p.id}" value="1" min="1" max="64" onchange="validateQty(this)">
+              <label for="qty-${p.id}">Anzahl:</label>
+              <select id="qty-${p.id}">
+                <option value="1">1x</option>
+                <option value="2">2x</option>
+                <option value="3">3x</option>
+                <option value="4">4x</option>
+                <option value="5">5x (Max)</option>
+              </select>
             </div>
             <button class="btn-add" onclick="addToCart(${p.id})">In den Einkaufswagen</button>
           </div>
@@ -209,22 +220,13 @@
       });
     }
 
-    function validateQty(input) {
-      let val = parseInt(input.value, 10);
-      if (isNaN(val) || val < 1) input.value = 1;
-      if (val > 64) input.value = 64;
-    }
-
     function addToCart(productId) {
       const p = products.find(prod => prod.id === productId);
-      const qtyInput = document.getElementById(`qty-${productId}`);
-      let qty = parseInt(qtyInput.value, 10);
-
-      if (isNaN(qty) || qty < 1) qty = 1;
-      if (qty > 64) qty = 64;
+      const qtySelect = document.getElementById(`qty-${productId}`);
+      const qty = parseInt(qtySelect.value, 10);
 
       const totalPriceNum = p.priceNum * qty;
-      const title = `${qty}x ${p.name}`;
+      const title = `${qty}x ${p.name} (${p.unit})`;
       const priceText = `${totalPriceNum}x ${p.curr}`;
 
       cart.push({ title, priceText });
@@ -232,4 +234,71 @@
     }
 
     function renderCart() {
-      const cartItemsDiv = document.getElementById('cart-
+      const cartItemsDiv = document.getElementById('cart-items');
+      const hiddenInput = document.getElementById('hidden-cart-input');
+      const submitBtn = document.getElementById('submit-btn');
+
+      if (cart.length === 0) {
+        cartItemsDiv.innerHTML = '<p style="color: #777; font-size: 13px;">Dein Einkaufswagen ist leer.</p>';
+        submitBtn.disabled = true;
+        hiddenInput.value = '';
+        return;
+      }
+
+      cartItemsDiv.innerHTML = '';
+      let summaryText = [];
+
+      cart.forEach((item, index) => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'cart-item';
+        itemDiv.innerHTML = `<span>${item.title}</span> <b>${item.priceText}</b>`;
+        cartItemsDiv.appendChild(itemDiv);
+        summaryText.push(`${item.title} -> ${item.priceText}`);
+      });
+
+      hiddenInput.value = summaryText.join(' | ');
+      submitBtn.disabled = false;
+    }
+
+    function filterCategory(cat) {
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      const title = document.getElementById('grid-title');
+      document.getElementById('search-input').value = '';
+
+      if (cat === 'all') {
+        document.getElementById('btn-all').classList.add('active');
+        title.innerText = "Alle Items";
+        displayProducts(products);
+      } else if (cat === 'deals') {
+        document.getElementById('btn-deals').classList.add('active');
+        title.innerText = "🔥 Angebote des Tages";
+        displayProducts(products.filter(p => p.isDeal));
+      } else {
+        const btn = document.getElementById(`btn-${cat}`);
+        if(btn) btn.classList.add('active');
+        displayProducts(products.filter(p => p.category === cat));
+      }
+    }
+
+    function performSearch() {
+      const query = document.getElementById('search-input').value.toLowerCase().trim();
+      const title = document.getElementById('grid-title');
+
+      if (!query) {
+        displayProducts(products);
+        title.innerText = "Alle Items";
+        return;
+      }
+
+      const filtered = products.filter(p => p.name.toLowerCase().includes(query));
+      title.innerText = `Suchergebnisse für "${query}" (${filtered.length})`;
+      displayProducts(filtered);
+    }
+
+    window.onload = function() {
+      displayProducts(products);
+    };
+  </script>
+
+</body>
+</html>
