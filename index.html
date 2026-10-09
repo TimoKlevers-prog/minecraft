@@ -32,7 +32,6 @@
     .deal-badge { position: absolute; top: 8px; left: 8px; background-color: #cc0c39; color: white; font-size: 10px; font-weight: bold; padding: 2px 5px; border-radius: 3px; }
     .product-icon { font-size: 38px; margin: 8px 0; }
     .product-title { font-size: 14px; font-weight: bold; margin-bottom: 5px; }
-    .product-unit { font-size: 11px; color: #666; margin-bottom: 5px; }
     
     .price-box { margin-bottom: 8px; }
     .old-price { text-decoration: line-through; color: #777; font-size: 11px; margin-right: 5px; }
@@ -84,7 +83,7 @@
   <!-- Banner -->
   <div class="hero-banner">
     <h1>Alle Minecraft Blöcke & Items ⛏️</h1>
-    <p>Bezahle nur mit Eisen & Diamanten | Wähle eine Menge von 1 bis 64 Stück!</p>
+    <p>Bezahle nur mit Eisen & Diamanten | Menge frei wählbar von 1 bis 64 Stück!</p>
   </div>
 
   <div class="container">
@@ -136,4 +135,101 @@
       { id: 10, name: "Bruchstein (Cobblestone)", priceNum: 1, curr: "Eisen", category: "bau", icon: "🪨", isDeal: false },
       { id: 11, name: "Ziegelstein Block", priceNum: 1, curr: "Eisen", category: "bau", icon: "🧱", isDeal: false },
       { id: 12, name: "Glas", priceNum: 1, curr: "Eisen", category: "bau", icon: "🪟", isDeal: false },
-      { id: 13, name: "Netherrack", priceNum: 1, curr: "Eisen", category: "bau", icon: "🔥", isDeal: false
+      { id: 13, name: "Netherrack", priceNum: 1, curr: "Eisen", category: "bau", icon: "🔥", isDeal: false },
+      { id: 14, name: "Endstein", priceNum: 2, curr: "Eisen", category: "bau", icon: "🟡", isDeal: false },
+      { id: 15, name: "Seelen-Sand", priceNum: 1, curr: "Eisen", category: "bau", icon: "🤎", isDeal: false },
+
+      // AUSRÜSTUNG & WERKZEUGE
+      { id: 17, name: "Netherit Spitzhacke", priceNum: 12, curr: "Diamanten", category: "tools", icon: "⛏️", isDeal: true, oldPrice: "16x Diamanten", dealText: "TOP DEAL" },
+      { id: 18, name: "Diamantschwert", priceNum: 3, curr: "Diamanten", category: "tools", icon: "⚔️", isDeal: false },
+      { id: 19, name: "Diamant Brustpanzer", priceNum: 8, curr: "Diamanten", category: "tools", icon: "👕", isDeal: false },
+      { id: 20, name: "Bogen & Pfeile", priceNum: 3, curr: "Eisen", category: "tools", icon: "🏹", isDeal: false },
+      { id: 21, name: "Elytra", priceNum: 15, curr: "Diamanten", category: "tools", icon: "🪽", isDeal: true, oldPrice: "20x Diamanten", dealText: "SELTEN" },
+      { id: 22, name: "Dreizack (Trident)", priceNum: 10, curr: "Diamanten", category: "tools", icon: "🔱", isDeal: false },
+
+      // REDSTONE
+      { id: 23, name: "Redstone Staub", priceNum: 1, curr: "Eisen", category: "redstone", icon: "🔴", isDeal: false },
+      { id: 24, name: "Kolben (Piston)", priceNum: 2, curr: "Eisen", category: "redstone", icon: "📦", isDeal: false },
+      { id: 25, name: "Klebriger Kolben", priceNum: 3, curr: "Eisen", category: "redstone", icon: "🟢", isDeal: false },
+      { id: 26, name: "Trichter (Hopper)", priceNum: 3, curr: "Eisen", category: "redstone", icon: "🔻", isDeal: false },
+      { id: 27, name: "Beobachter (Observer)", priceNum: 2, curr: "Eisen", category: "redstone", icon: "👁️", isDeal: false },
+
+      // NAHRUNG & TRÄNKE
+      { id: 28, name: "Goldener Apfel", priceNum: 2, curr: "Diamanten", category: "food", icon: "🍏", isDeal: false },
+      { id: 29, name: "Gebratenes Rindfleisch", priceNum: 1, curr: "Eisen", category: "food", icon: "🥩", isDeal: false },
+      { id: 30, name: "Zaubertrank der Heilung", priceNum: 2, curr: "Eisen", category: "food", icon: "🧪", isDeal: false },
+      { id: 31, name: "Brot", priceNum: 1, curr: "Eisen", category: "food", icon: "🍞", isDeal: false },
+
+      // MOB DROPS & SONSTIGES
+      { id: 32, name: "Enderperle", priceNum: 1, curr: "Eisen", category: "mob", icon: "🔮", isDeal: false },
+      { id: 33, name: "Lohenrute (Blaze Rod)", priceNum: 2, curr: "Eisen", category: "mob", icon: "🔥", isDeal: false },
+      { id: 34, name: "Schleimball", priceNum: 1, curr: "Eisen", category: "mob", icon: "🟢", isDeal: false },
+      { id: 35, name: "Totem der Unsterblichkeit", priceNum: 5, curr: "Diamanten", category: "mob", icon: "🗿", isDeal: true, oldPrice: "8x Diamanten", dealText: "RETTUNG" }
+    ];
+
+    let cart = [];
+
+    function displayProducts(items) {
+      const grid = document.getElementById('product-grid');
+      const noResults = document.getElementById('no-results');
+      grid.innerHTML = '';
+
+      if (items.length === 0) {
+        noResults.style.display = 'block';
+        return;
+      }
+      noResults.style.display = 'none';
+
+      items.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+
+        let badge = p.isDeal ? `<div class="deal-badge">${p.dealText}</div>` : '';
+        let priceStr = `${p.priceNum}x ${p.curr} / Stk.`;
+        let priceHTML = p.oldPrice 
+          ? `<span class="old-price">${p.oldPrice}</span><span class="current-price">${priceStr}</span>` 
+          : `<span class="current-price">${priceStr}</span>`;
+
+        card.innerHTML = `
+          ${badge}
+          <div>
+            <div class="product-icon">${p.icon}</div>
+            <div class="product-title">${p.name}</div>
+            <div class="price-box">${priceHTML}</div>
+          </div>
+          <div>
+            <div class="qty-box">
+              <label for="qty-${p.id}">Menge:</label>
+              <input type="number" id="qty-${p.id}" value="1" min="1" max="64" onchange="validateQty(this)">
+            </div>
+            <button class="btn-add" onclick="addToCart(${p.id})">In den Einkaufswagen</button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function validateQty(input) {
+      let val = parseInt(input.value, 10);
+      if (isNaN(val) || val < 1) input.value = 1;
+      if (val > 64) input.value = 64;
+    }
+
+    function addToCart(productId) {
+      const p = products.find(prod => prod.id === productId);
+      const qtyInput = document.getElementById(`qty-${productId}`);
+      let qty = parseInt(qtyInput.value, 10);
+
+      if (isNaN(qty) || qty < 1) qty = 1;
+      if (qty > 64) qty = 64;
+
+      const totalPriceNum = p.priceNum * qty;
+      const title = `${qty}x ${p.name}`;
+      const priceText = `${totalPriceNum}x ${p.curr}`;
+
+      cart.push({ title, priceText });
+      renderCart();
+    }
+
+    function renderCart() {
+      const cartItemsDiv = document.getElementById('cart-
