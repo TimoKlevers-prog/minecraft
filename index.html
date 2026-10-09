@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MineZone - Alle Minecraft Blöcke & Items</title>
+  <title>MineZone - Der ultimative Minecraft Shop</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
     body { background-color: #eaeded; color: #0f1111; }
@@ -15,42 +15,42 @@
     .search-bar input { width: 100%; padding: 8px 12px; border: none; border-radius: 4px 0 0 4px; font-size: 14px; outline: none; }
     .search-bar button { background-color: #febd69; border: none; padding: 8px 16px; border-radius: 0 4px 4px 0; cursor: pointer; font-weight: bold; }
     
-    nav { background-color: #232f3e; padding: 10px 20px; display: flex; gap: 8px; flex-wrap: wrap; }
-    .nav-btn { background: transparent; border: 1px solid #ff9900; color: white; padding: 6px 12px; border-radius: 20px; cursor: pointer; font-size: 12px; font-weight: bold; }
+    nav { background-color: #232f3e; padding: 10px 20px; display: flex; gap: 6px; flex-wrap: wrap; }
+    .nav-btn { background: transparent; border: 1px solid #ff9900; color: white; padding: 5px 10px; border-radius: 20px; cursor: pointer; font-size: 11px; font-weight: bold; }
     .nav-btn:hover, .nav-btn.active { background-color: #ff9900; color: #131921; }
 
-    .hero-banner { background: #232f3e; color: white; padding: 18px; text-align: center; border-bottom: 3px solid #ff9900; margin-bottom: 20px; }
-    .hero-banner h1 { font-size: 22px; margin-bottom: 5px; }
-    .hero-banner p { font-size: 13px; color: #ddd; }
+    .hero-banner { background: #232f3e; color: white; padding: 16px; text-align: center; border-bottom: 3px solid #ff9900; margin-bottom: 20px; }
+    .hero-banner h1 { font-size: 22px; margin-bottom: 4px; }
+    .hero-banner p { font-size: 12px; color: #ddd; }
 
     .container { max-width: 1200px; margin: 0 auto 30px auto; padding: 0 20px; display: grid; grid-template-columns: 2.5fr 1fr; gap: 20px; }
     
     .section-title { font-size: 18px; font-weight: bold; margin-bottom: 15px; }
-    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
     .product-card { background: white; padding: 12px; border-radius: 8px; border: 1px solid #ddd; text-align: center; display: flex; flex-direction: column; justify-content: space-between; position: relative; }
     
-    .deal-badge { position: absolute; top: 8px; left: 8px; background-color: #cc0c39; color: white; font-size: 10px; font-weight: bold; padding: 2px 5px; border-radius: 3px; }
-    .product-icon { font-size: 38px; margin: 8px 0; }
-    .product-title { font-size: 14px; font-weight: bold; margin-bottom: 5px; }
+    .deal-badge { position: absolute; top: 8px; left: 8px; background-color: #cc0c39; color: white; font-size: 9px; font-weight: bold; padding: 2px 5px; border-radius: 3px; }
+    .product-icon { font-size: 34px; margin: 6px 0; }
+    .product-title { font-size: 13px; font-weight: bold; margin-bottom: 4px; }
     
     .price-box { margin-bottom: 8px; }
-    .old-price { text-decoration: line-through; color: #777; font-size: 11px; margin-right: 5px; }
-    .current-price { color: #b12704; font-size: 14px; font-weight: bold; }
+    .old-price { text-decoration: line-through; color: #777; font-size: 10px; margin-right: 4px; }
+    .current-price { color: #b12704; font-size: 13px; font-weight: bold; }
     
-    .qty-box { display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 8px; font-size: 12px; }
-    .qty-box input { width: 60px; padding: 4px; border-radius: 4px; border: 1px solid #ccc; font-weight: bold; text-align: center; }
+    .qty-box { display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 8px; font-size: 11px; }
+    .qty-box input { width: 55px; padding: 3px; border-radius: 4px; border: 1px solid #ccc; font-weight: bold; text-align: center; }
 
-    .btn-add { background-color: #ffd814; border: 1px solid #fcd200; border-radius: 20px; padding: 7px; cursor: pointer; font-weight: bold; width: 100%; font-size: 13px; }
+    .btn-add { background-color: #ffd814; border: 1px solid #fcd200; border-radius: 20px; padding: 6px; cursor: pointer; font-weight: bold; width: 100%; font-size: 12px; }
     .btn-add:hover { background-color: #f7ca00; }
     
     .cart-box { background: white; padding: 18px; border-radius: 8px; border: 1px solid #ddd; height: fit-content; position: sticky; top: 20px; }
-    .cart-box h2 { border-bottom: 1px solid #ccc; padding-bottom: 8px; margin-bottom: 12px; font-size: 17px; }
+    .cart-box h2 { border-bottom: 1px solid #ccc; padding-bottom: 8px; margin-bottom: 12px; font-size: 16px; }
     .cart-item { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12px; background: #f7f7f7; padding: 6px 8px; border-radius: 4px; }
     
     form { margin-top: 15px; display: flex; flex-direction: column; gap: 8px; }
     form label { font-size: 11px; font-weight: bold; }
-    form input { width: 100%; padding: 7px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; }
-    .btn-order { background-color: #ffa41c; border: 1px solid #ff8f00; border-radius: 20px; padding: 10px; cursor: pointer; font-weight: bold; font-size: 14px; margin-top: 8px; }
+    form input { width: 100%; padding: 7px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px; }
+    .btn-order { background-color: #ffa41c; border: 1px solid #ff8f00; border-radius: 20px; padding: 10px; cursor: pointer; font-weight: bold; font-size: 13px; margin-top: 8px; }
     .btn-order:hover { background-color: #f08804; }
     .btn-order:disabled { background-color: #e7e7e7; border-color: #ddd; color: #888; cursor: not-allowed; }
 
@@ -63,7 +63,7 @@
   <header>
     <div class="logo" onclick="filterCategory('all')">Mine<span>Zone</span></div>
     <div class="search-bar">
-      <input type="text" id="search-input" placeholder="Block oder Item suchen...">
+      <input type="text" id="search-input" placeholder="Item oder Verzauberung suchen...">
       <button onclick="performSearch()">Suchen</button>
     </div>
   </header>
@@ -71,18 +71,20 @@
   <!-- Navigation -->
   <nav>
     <button class="nav-btn active" id="btn-all" onclick="filterCategory('all')">Alle Items</button>
-    <button class="nav-btn" id="btn-deals" onclick="filterCategory('deals')">🔥 Angebote</button>
-    <button class="nav-btn" id="btn-bau" onclick="filterCategory('bau')">🧱 Baustoffe</button>
-    <button class="nav-btn" id="btn-tools" onclick="filterCategory('tools')">⚔️ Ausrüstung</button>
+    <button class="nav-btn" id="btn-deals" onclick="filterCategory('deals')">🔥 Angebote (Stündlich neu)</button>
+    <button class="nav-btn" id="btn-ench" onclick="filterCategory('ench')">📜 Verzauberungen</button>
+    <button class="nav-btn" id="btn-bau" onclick="filterCategory('bau')">🧱 Bau & Deko</button>
     <button class="nav-btn" id="btn-redstone" onclick="filterCategory('redstone')">⚡ Redstone</button>
-    <button class="nav-btn" id="btn-food" onclick="filterCategory('food')">🍎 Nahrung & Tränke</button>
-    <button class="nav-btn" id="btn-mob" onclick="filterCategory('mob')">🦴 Mob Drops</button>
+    <button class="nav-btn" id="btn-tools" onclick="filterCategory('tools')">⚔️ Ausrüstung</button>
+    <button class="nav-btn" id="btn-food" onclick="filterCategory('food')">🍎 Nahrung</button>
+    <button class="nav-btn" id="btn-brew" onclick="filterCategory('brew')">🧪 Brauen & Tränke</button>
+    <button class="nav-btn" id="btn-craft" onclick="filterCategory('craft')">💎 Drops & Trims</button>
   </nav>
 
   <!-- Banner -->
   <div class="hero-banner">
-    <h1>Alle Minecraft Blöcke & Items ⛏️</h1>
-    <p>Bezahle nur mit Eisen & Diamanten | Menge frei wählbar von 1 bis 64 Stück!</p>
+    <h1>Kaufen mit Eisen & Diamanten ⛏️</h1>
+    <p>Wähle deine Wunschmenge (1–64 Stück) | Stündlich wechselnde Deals!</p>
   </div>
 
   <div class="container">
@@ -118,49 +120,220 @@
   </div>
 
   <script>
-    // Keine Erze enthalten. Preise sind auf Stückbasis berechnet (1 bis max 64 auswählbar).
-    const products = [
-      // BAUSTOFFE
-      { id: 1, name: "Obsidian", priceNum: 2, curr: "Eisen", category: "bau", icon: "🔮", isDeal: true, oldPrice: "3x Eisen", dealText: "ANGEBOT" },
-      { id: 2, name: "Eichenholz Stamm", priceNum: 1, curr: "Eisen", category: "bau", icon: "🪵", isDeal: false },
-      { id: 3, name: "Bruchstein (Cobblestone)", priceNum: 1, curr: "Eisen", category: "bau", icon: "🪨", isDeal: false },
-      { id: 4, name: "Ziegelstein Block", priceNum: 1, curr: "Eisen", category: "bau", icon: "🧱", isDeal: false },
-      { id: 5, name: "Glas Block", priceNum: 1, curr: "Eisen", category: "bau", icon: "🪟", isDeal: false },
-      { id: 6, name: "Netherrack", priceNum: 1, curr: "Eisen", category: "bau", icon: "🔥", isDeal: false },
-      { id: 7, name: "Endstein", priceNum: 2, curr: "Eisen", category: "bau", icon: "🟡", isDeal: false },
-      { id: 8, name: "Seelen-Sand", priceNum: 1, curr: "Eisen", category: "bau", icon: "🤎", isDeal: false },
-      { id: 9, name: "Quarzblock", priceNum: 2, curr: "Eisen", category: "bau", icon: "🏛️", isDeal: false },
-
-      // AUSRÜSTUNG & WERKZEUGE
-      { id: 10, name: "Netherit Spitzhacke", priceNum: 14, curr: "Diamanten", category: "tools", icon: "⛏️", isDeal: true, oldPrice: "18x Diamanten", dealText: "TOP DEAL" },
-      { id: 11, name: "Diamantschwert", priceNum: 4, curr: "Diamanten", category: "tools", icon: "⚔️", isDeal: false },
-      { id: 12, name: "Diamant Brustpanzer", priceNum: 10, curr: "Diamanten", category: "tools", icon: "👕", isDeal: false },
-      { id: 13, name: "Bogen & Pfeil Set", priceNum: 3, curr: "Eisen", category: "tools", icon: "🏹", isDeal: false },
-      { id: 14, name: "Elytra", priceNum: 18, curr: "Diamanten", category: "tools", icon: "🪽", isDeal: true, oldPrice: "24x Diamanten", dealText: "SELTEN" },
-      { id: 15, name: "Dreizack (Trident)", priceNum: 12, curr: "Diamanten", category: "tools", icon: "🔱", isDeal: false },
-
-      // REDSTONE
-      { id: 16, name: "Redstone Staub", priceNum: 1, curr: "Eisen", category: "redstone", icon: "🔴", isDeal: false },
-      { id: 17, name: "Kolben (Piston)", priceNum: 2, curr: "Eisen", category: "redstone", icon: "📦", isDeal: false },
-      { id: 18, name: "Klebriger Kolben", priceNum: 3, curr: "Eisen", category: "redstone", icon: "🟢", isDeal: false },
-      { id: 19, name: "Trichter (Hopper)", priceNum: 4, curr: "Eisen", category: "redstone", icon: "🔻", isDeal: false },
-      { id: 20, name: "Beobachter (Observer)", priceNum: 2, curr: "Eisen", category: "redstone", icon: "👁️", isDeal: false },
-
-      // NAHRUNG & TRÄNKE
-      { id: 21, name: "Goldener Apfel", priceNum: 3, curr: "Diamanten", category: "food", icon: "🍏", isDeal: false },
-      { id: 22, name: "Gebratenes Rindfleisch", priceNum: 1, curr: "Eisen", category: "food", icon: "🥩", isDeal: false },
-      { id: 23, name: "Zaubertrank der Heilung", priceNum: 2, curr: "Eisen", category: "food", icon: "🧪", isDeal: false },
-      { id: 24, name: "Brot", priceNum: 1, curr: "Eisen", category: "food", icon: "🍞", isDeal: false },
-
-      // MOB DROPS & SONSTIGES
-      { id: 25, name: "Enderperle", priceNum: 2, curr: "Eisen", category: "mob", icon: "🔮", isDeal: false },
-      { id: 26, name: "Lohenrute (Blaze Rod)", priceNum: 2, curr: "Eisen", category: "mob", icon: "🔥", isDeal: false },
-      { id: 27, name: "Schleimball", priceNum: 1, curr: "Eisen", category: "mob", icon: "🟢", isDeal: false },
-      { id: 28, name: "Totem der Unsterblichkeit", priceNum: 6, curr: "Diamanten", category: "mob", icon: "🗿", isDeal: true, oldPrice: "9x Diamanten", dealText: "RETTUNG" },
-      { id: 29, name: "Sattel", priceNum: 3, curr: "Eisen", category: "mob", icon: "🏇", isDeal: false }
+    // RÜSTUNGSVERZAUBERUNGEN
+    const armorEnchants = [
+      { name: "Schutz (Protection)", levels: ["I", "II", "III", "IV"], basePrice: 2, curr: "Diamanten" },
+      { name: "Feuerschutz (Fire Protection)", levels: ["I", "II", "III", "IV"], basePrice: 2, curr: "Diamanten" },
+      { name: "Explosionsschutz (Blast Protection)", levels: ["I", "II", "III", "IV"], basePrice: 2, curr: "Diamanten" },
+      { name: "Schusssicher (Projectiles Protection)", levels: ["I", "II", "III", "IV"], basePrice: 2, curr: "Diamanten" },
+      { name: "Federfall (Feather Falling)", levels: ["I", "II", "III", "IV"], basePrice: 3, curr: "Diamanten" },
+      { name: "Atmung (Respiration)", levels: ["I", "II", "III"], basePrice: 2, curr: "Diamanten" },
+      { name: "Wasseraffinität (Aqua Affinity)", levels: ["I"], basePrice: 2, curr: "Diamanten" },
+      { name: "Dornen (Thorns)", levels: ["I", "II", "III"], basePrice: 3, curr: "Diamanten" },
+      { name: "Wasserläufer (Depth Strider)", levels: ["I", "II", "III"], basePrice: 2, curr: "Diamanten" },
+      { name: "Eisläufer (Frost Walker)", levels: ["I", "II"], basePrice: 3, curr: "Diamanten" },
+      { name: "Seelenschleicher (Soul Speed)", levels: ["I", "II", "III"], basePrice: 3, curr: "Diamanten" },
+      { name: "Schleichgeschwindigkeit (Swift Sneak)", levels: ["I", "II", "III"], basePrice: 4, curr: "Diamanten" }
     ];
 
+    // WAFFENVERZAUBERUNGEN
+    const weaponEnchants = [
+      { name: "Schärfe (Sharpness)", levels: ["I", "II", "III", "IV", "V"], basePrice: 2, curr: "Diamanten" },
+      { name: "Nemesis der Gliederfüßer", levels: ["I", "II", "III", "IV", "V"], basePrice: 1, curr: "Diamanten" },
+      { name: "Ausräuchern (Smite)", levels: ["I", "II", "III", "IV", "V"], basePrice: 2, curr: "Diamanten" },
+      { name: "Rückstoß (Knockback)", levels: ["I", "II"], basePrice: 2, curr: "Diamanten" },
+      { name: "Plünderung (Looting)", levels: ["I", "II", "III"], basePrice: 3, curr: "Diamanten" },
+      { name: "Schwungbedeckung (Sweeping Edge)", levels: ["I", "II", "III"], basePrice: 2, curr: "Diamanten" },
+      { name: "Verbrennung (Fire Aspect)", levels: ["I", "II"], basePrice: 3, curr: "Diamanten" },
+      { name: "Dichte (Density) [Keule]", levels: ["I", "II", "III", "IV", "V"], basePrice: 3, curr: "Diamanten" },
+      { name: "Bruch (Breach) [Keule]", levels: ["I", "II", "III", "IV"], basePrice: 3, curr: "Diamanten" },
+      { name: "Windstoß (Wind Burst) [Keule]", levels: ["I", "II", "III"], basePrice: 5, curr: "Diamanten" }
+    ];
+
+    // WERKZEUGVERZAUBERUNGEN
+    const toolEnchants = [
+      { name: "Effizienz (Efficiency)", levels: ["I", "II", "III", "IV", "V"], basePrice: 2, curr: "Diamanten" },
+      { name: "Behutsamkeit (Silk Touch)", levels: ["I"], basePrice: 4, curr: "Diamanten" },
+      { name: "Glück (Fortune)", levels: ["I", "II", "III"], basePrice: 3, curr: "Diamanten" },
+      { name: "Ködermagie (Lure)", levels: ["I", "II", "III"], basePrice: 1, curr: "Diamanten" },
+      { name: "Glück des Meeres (Luck of the Sea)", levels: ["I", "II", "III"], basePrice: 2, curr: "Diamanten" }
+    ];
+
+    // BOGEN & ARMBRUST
+    const bowEnchants = [
+      { name: "Stärke (Power)", levels: ["I", "II", "III", "IV", "V"], basePrice: 2, curr: "Diamanten" },
+      { name: "Schlag (Punch)", levels: ["I", "II"], basePrice: 2, curr: "Diamanten" },
+      { name: "Flamme (Flame)", levels: ["I"], basePrice: 3, curr: "Diamanten" },
+      { name: "Unendlichkeit (Infinity)", levels: ["I"], basePrice: 5, curr: "Diamanten" },
+      { name: "Schnellladen (Quick Charge)", levels: ["I", "II", "III"], basePrice: 2, curr: "Diamanten" },
+      { name: "Mehrfachschuss (Multishot)", levels: ["I"], basePrice: 3, curr: "Diamanten" },
+      { name: "Durchschuss (Piercing)", levels: ["I", "II", "III", "IV"], basePrice: 2, curr: "Diamanten" }
+    ];
+
+    // DREIZACK
+    const tridentEnchants = [
+      { name: "Sog (Riptide)", levels: ["I", "II", "III"], basePrice: 3, curr: "Diamanten" },
+      { name: "Treue (Loyalty)", levels: ["I", "II", "III"], basePrice: 3, curr: "Diamanten" },
+      { name: "Entladung (Channeling)", levels: ["I"], basePrice: 4, curr: "Diamanten" },
+      { name: "Harpune (Impaling)", levels: ["I", "II", "III", "IV", "V"], basePrice: 2, curr: "Diamanten" }
+    ];
+
+    // UNIVERSAL & FLÜCHE
+    const universalEnchants = [
+      { name: "Haltbarkeit (Unbreaking)", levels: ["I", "II", "III"], basePrice: 2, curr: "Diamanten" },
+      { name: "Reparatur (Mending)", levels: ["I"], basePrice: 6, curr: "Diamanten" },
+      { name: "Fluch des Verschwindens", levels: ["I"], basePrice: 1, curr: "Eisen" },
+      { name: "Fluch der Bindung", levels: ["I"], basePrice: 1, curr: "Eisen" }
+    ];
+
+    let products = [];
+    let idCounter = 1;
+
+    // Generiere Buch-Items für alle Verzauberungen
+    function addEnchants(list) {
+      list.forEach(e => {
+        e.levels.forEach((lvl, idx) => {
+          let multiplier = idx + 1;
+          products.push({
+            id: idCounter++,
+            name: `Buch: ${e.name} ${lvl}`,
+            priceNum: e.basePrice * multiplier,
+            curr: e.curr,
+            category: "ench",
+            icon: "📜",
+            isDeal: false
+          });
+        });
+      });
+    }
+
+    addEnchants(armorEnchants);
+    addEnchants(weaponEnchants);
+    addEnchants(toolEnchants);
+    addEnchants(bowEnchants);
+    addEnchants(tridentEnchants);
+    addEnchants(universalEnchants);
+
+    // MANUELLE WEITERE ITEM-GRUPPEN (Gewinnmarge garantiert!)
+    const additionalItems = [
+      // MAGIE & CRAFTING
+      { name: "Zaubertisch", priceNum: 4, curr: "Diamanten", category: "ench", icon: "🔮" }, // Herstellkosten: 2 Dias + 4 Obs -> Gewinn 2 Dias!
+
+      // BAU & DEKO
+      { name: "Bruchstein (Cobblestone)", priceNum: 1, curr: "Eisen", category: "bau", icon: "🪨" },
+      { name: "Glatter Stein", priceNum: 1, curr: "Eisen", category: "bau", icon: "🪨" },
+      { name: "Granit (Poliert)", priceNum: 1, curr: "Eisen", category: "bau", icon: "🧱" },
+      { name: "Diorit (Poliert)", priceNum: 1, curr: "Eisen", category: "bau", icon: "🧱" },
+      { name: "Andesit (Poliert)", priceNum: 1, curr: "Eisen", category: "bau", icon: "🧱" },
+      { name: "Tuff", priceNum: 1, curr: "Eisen", category: "bau", icon: "🪨" },
+      { name: "Tiefenschiefer (Polished)", priceNum: 1, curr: "Eisen", category: "bau", icon: "🖤" },
+      { name: "Schwarzstein", priceNum: 1, curr: "Eisen", category: "bau", icon: "⬛" },
+      { name: "Basalt", priceNum: 1, curr: "Eisen", category: "bau", icon: "🪵" },
+      { name: "Obsidian", priceNum: 2, curr: "Eisen", category: "bau", icon: "🔮" },
+      { name: "Holzstamm (Eiche/Fichte/Birke)", priceNum: 1, curr: "Eisen", category: "bau", icon: "🪵" },
+      { name: "Holzstamm (Tropen/Akazie/Schwarzeiche)", priceNum: 1, curr: "Eisen", category: "bau", icon: "🪵" },
+      { name: "Holzstamm (Mangrove/Kirsche/Blass)", priceNum: 2, curr: "Eisen", category: "bau", icon: "🌸" },
+      { name: "Bambusblock / Karmesin / Wirr", priceNum: 2, curr: "Eisen", category: "bau", icon: "🎋" },
+      { name: "Bretter / Stufen / Treppen", priceNum: 1, curr: "Eisen", category: "bau", icon: "🪵" },
+      { name: "Zaun / Zauntor / Tür / Falltür", priceNum: 1, curr: "Eisen", category: "bau", icon: "🚪" },
+      { name: "Kohleblock", priceNum: 2, curr: "Eisen", category: "bau", icon: "⬛" },
+      { name: "Goldblock", priceNum: 5, curr: "Eisen", category: "bau", icon: "🟨" },
+      { name: "Lapis Lazuliblock", priceNum: 2, curr: "Eisen", category: "bau", icon: "🟦" },
+      { name: "Redstone-Block", priceNum: 2, curr: "Eisen", category: "bau", icon: "🟥" },
+      { name: "Smaragdblock", priceNum: 3, curr: "Diamanten", category: "bau", icon: "🟩" },
+      { name: "Netheritblock", priceNum: 35, curr: "Diamanten", category: "bau", icon: "⬛" },
+      { name: "Kupferblock (gewachst/oxidiert)", priceNum: 2, curr: "Eisen", category: "bau", icon: "🟧" },
+      { name: "Quarzblock", priceNum: 2, curr: "Eisen", category: "bau", icon: "🏛️" },
+      { name: "Antiker Schrott (Debris)", priceNum: 4, curr: "Diamanten", category: "bau", icon: "🔥" },
+      { name: "Glas / Buntglas (16 Farben)", priceNum: 1, curr: "Eisen", category: "bau", icon: "🪟" },
+      { name: "Keramik / Glasierte Keramik", priceNum: 1, curr: "Eisen", category: "bau", icon: "🎨" },
+      { name: "Erde / Grasblock / Moos", priceNum: 1, curr: "Eisen", category: "bau", icon: "🌱" },
+      { name: "Myzel / Podsol / Wurzelerde", priceNum: 2, curr: "Eisen", category: "bau", icon: "🍄" },
+      { name: "Sand / Roter Sand / Kies", priceNum: 1, curr: "Eisen", category: "bau", icon: "⏳" },
+      { name: "Schwamm (Nass/Trocken)", priceNum: 3, curr: "Eisen", category: "bau", icon: "🧽" },
+      { name: "Netherrack / Endstein / Purpur", priceNum: 1, curr: "Eisen", category: "bau", icon: "🟪" },
+
+      // REDSTONE & MECHANIK
+      { name: "Redstone-Staub", priceNum: 1, curr: "Eisen", category: "redstone", icon: "🔴" },
+      { name: "Redstone-Fackel", priceNum: 1, curr: "Eisen", category: "redstone", icon: "🕯️" },
+      { name: "Redstone-Verstärker (Repeater)", priceNum: 2, curr: "Eisen", category: "redstone", icon: "⏱️" },
+      { name: "Redstone-Vergleicher (Comparator)", priceNum: 3, curr: "Eisen", category: "redstone", icon: "📐" },
+      { name: "Kolben (Piston)", priceNum: 2, curr: "Eisen", category: "redstone", icon: "📦" },
+      { name: "Klebriger Kolben", priceNum: 3, curr: "Eisen", category: "redstone", icon: "🟢" },
+      { name: "Spender (Dispenser) / Werfer", priceNum: 3, curr: "Eisen", category: "redstone", icon: "🏹" },
+      { name: "Trichter (Hopper)", priceNum: 4, curr: "Eisen", category: "redstone", icon: "🔻" },
+      { name: "Zielblock / Beobachter (Observer)", priceNum: 2, curr: "Eisen", category: "redstone", icon: "👁️" },
+      { name: "Tageslichtsensor / Auslöser", priceNum: 2, curr: "Eisen", category: "redstone", icon: "☀️" },
+      { name: "Notenblock / Redstone-Lampe", priceNum: 2, curr: "Eisen", category: "redstone", icon: "💡" },
+      { name: "Schalter / Druckplatten", priceNum: 1, curr: "Eisen", category: "redstone", icon: "🔘" },
+
+      // AUSRÜSTUNG (OHNE EISEN & DIAMANT)
+      { name: "Holz / Stein Werkzeuge (Set)", priceNum: 1, curr: "Eisen", category: "tools", icon: "🪨" },
+      { name: "Goldene Spitzhacke / Schwert", priceNum: 2, curr: "Eisen", category: "tools", icon: "🥇" },
+      { name: "Netherit Schwert", priceNum: 10, curr: "Diamanten", category: "tools", icon: "⚔️" },
+      { name: "Netherit Spitzhacke / Axt", priceNum: 14, curr: "Diamanten", category: "tools", icon: "⛏️" },
+      { name: "Leder Rüstung (Set)", priceNum: 2, curr: "Eisen", category: "tools", icon: "🥋" },
+      { name: "Kettenrüstung (Set)", priceNum: 6, curr: "Eisen", category: "tools", icon: "⛓️" },
+      { name: "Gold Rüstung (Set)", priceNum: 4, curr: "Eisen", category: "tools", icon: "👑" },
+      { name: "Netherit Rüstungs-Teil", priceNum: 12, curr: "Diamanten", category: "tools", icon: "🛡️" },
+      { name: "Schildkrötenpanzer Helm", priceNum: 5, curr: "Eisen", category: "tools", icon: "🐢" },
+      { name: "Bogen / Armbrust", priceNum: 2, curr: "Eisen", category: "tools", icon: "🏹" },
+      { name: "Dreizack (Trident)", priceNum: 12, curr: "Diamanten", category: "tools", icon: "🔱" },
+      { name: "Keule (Mace)", priceNum: 20, curr: "Diamanten", category: "tools", icon: "🔨" },
+      { name: "Schild / Fernglas / Pinsel", priceNum: 2, curr: "Eisen", category: "tools", icon: "🛡️" },
+      { name: "Angel / Karotten- & Wirrpilzrute", priceNum: 1, curr: "Eisen", category: "tools", icon: "🎣" },
+      { name: "Elytra", priceNum: 18, curr: "Diamanten", category: "tools", icon: "🪽" },
+
+      // NAHRUNG & LANDWIRTSCHAFT
+      { name: "Apfel / Beeren", priceNum: 1, curr: "Eisen", category: "food", icon: "🍎" },
+      { name: "Goldener Apfel", priceNum: 3, curr: "Diamanten", category: "food", icon: "🍏" },
+      { name: "Verzauberter Goldener Apfel", priceNum: 12, curr: "Diamanten", category: "food", icon: "✨" },
+      { name: "Karotte / Kartoffel / Rübe", priceNum: 1, curr: "Eisen", category: "food", icon: "🥕" },
+      { name: "Brot / Keks / Kuchen", priceNum: 1, curr: "Eisen", category: "food", icon: "🍞" },
+      { name: "Gegartes Fleisch (Rind/Schwein/Huhn)", priceNum: 1, curr: "Eisen", category: "food", icon: "🥩" },
+      { name: "Fisch (Kabeljau/Lachs/Tropenfisch)", priceNum: 1, curr: "Eisen", category: "food", icon: "🐟" },
+
+      // BRAUEN & TRÄNKE
+      { name: "Braustand / Kessel", priceNum: 2, curr: "Eisen", category: "brew", icon: "🧪" },
+      { name: "Netherwarze / Lohenstaub / Rute", priceNum: 2, curr: "Eisen", category: "brew", icon: "🔥" },
+      { name: "Trank der Regeneration / Schnelligkeit", priceNum: 2, curr: "Eisen", category: "brew", icon: "🧪" },
+      { name: "Trank des Feuerschutzes / Stärke", priceNum: 2, curr: "Eisen", category: "brew", icon: "🧪" },
+      { name: "Trank der Unsichtbarkeit / Nachtsicht", priceNum: 3, curr: "Eisen", category: "brew", icon: "🧪" },
+      { name: "Wurftrank / Verweildauer-Trank (alle)", priceNum: 3, curr: "Eisen", category: "brew", icon: "💥" },
+
+      // DROPS, CRAFTING & TRIMS
+      { name: "Enderperle / Schleimball", priceNum: 1, curr: "Eisen", category: "craft", icon: "🔮" },
+      { name: "Netherstern", priceNum: 15, curr: "Diamanten", category: "craft", icon: "⭐" },
+      { name: "Nautilus-Schale / Herz des Meeres", priceNum: 4, curr: "Diamanten", category: "craft", icon: "🐚" },
+      { name: "Töpferscherben (alle Varianten)", priceNum: 2, curr: "Eisen", category: "craft", icon: "🏺" },
+      { name: "Rüstungsbesatz-Schablone (Trim)", priceNum: 5, curr: "Diamanten", category: "craft", icon: "📜" }
+    ];
+
+    additionalItems.forEach(item => {
+      products.push({
+        id: idCounter++,
+        name: item.name,
+        priceNum: item.priceNum,
+        curr: item.curr,
+        category: item.category,
+        icon: item.icon,
+        isDeal: false
+      });
+    });
+
     let cart = [];
+
+    // STÜNDLICH WECHSELNDE ANGEBOTE GENERIEREN
+    function getHourlyDeals() {
+      const currentHour = new Date().getHours();
+      // Nutze die Stunde als Seed für konsistente Angebote pro Stunde
+      let dealIndices = [];
+      for(let i = 0; i < 8; i++) {
+        let index = (currentHour * 13 + i * 29) % products.length;
+        dealIndices.push(index);
+      }
+      return dealIndices;
+    }
 
     function displayProducts(items) {
       const grid = document.getElementById('product-grid');
@@ -173,15 +346,24 @@
       }
       noResults.style.display = 'none';
 
+      const hourlyDeals = getHourlyDeals();
+
       items.forEach(p => {
         const card = document.createElement('div');
         card.className = 'product-card';
 
-        let badge = p.isDeal ? `<div class="deal-badge">${p.dealText}</div>` : '';
-        let priceStr = `${p.priceNum}x ${p.curr} / Stk.`;
-        let priceHTML = p.oldPrice 
-          ? `<span class="old-price">${p.oldPrice}</span><span class="current-price">${priceStr}</span>` 
-          : `<span class="current-price">${priceStr}</span>`;
+        let isHourlyDeal = hourlyDeals.includes(p.id - 1);
+        let effectivePrice = p.priceNum;
+        let badge = '';
+        let priceHTML = '';
+
+        if (isHourlyDeal && p.priceNum > 1) {
+          effectivePrice = Math.max(1, Math.floor(p.priceNum * 0.7)); // 30% Rabatt
+          badge = `<div class="deal-badge">STÜNDLICHER DEAL</div>`;
+          priceHTML = `<span class="old-price">${p.priceNum}x ${p.curr}</span><span class="current-price">${effectivePrice}x ${p.curr} / Stk.</span>`;
+        } else {
+          priceHTML = `<span class="current-price">${p.priceNum}x ${p.curr} / Stk.</span>`;
+        }
 
         card.innerHTML = `
           ${badge}
@@ -195,7 +377,7 @@
               <label for="qty-${p.id}">Menge:</label>
               <input type="number" id="qty-${p.id}" value="1" min="1" max="64" onchange="validateQty(this)">
             </div>
-            <button class="btn-add" onclick="addToCart(${p.id})">In den Einkaufswagen</button>
+            <button class="btn-add" onclick="addToCart(${p.id}, ${effectivePrice})">In den Einkaufswagen</button>
           </div>
         `;
         grid.appendChild(card);
@@ -208,7 +390,7 @@
       if (val > 64) input.value = 64;
     }
 
-    function addToCart(productId) {
+    function addToCart(productId, unitPrice) {
       const p = products.find(prod => prod.id === productId);
       const qtyInput = document.getElementById(`qty-${productId}`);
       let qty = parseInt(qtyInput.value, 10);
@@ -216,7 +398,7 @@
       if (isNaN(qty) || qty < 1) qty = 1;
       if (qty > 64) qty = 64;
 
-      const totalPriceNum = p.priceNum * qty;
+      const totalPriceNum = unitPrice * qty;
       const title = `${qty}x ${p.name}`;
       const priceText = `${totalPriceNum}x ${p.curr}`;
 
@@ -261,33 +443,4 @@
         title.innerText = "Alle Items";
         displayProducts(products);
       } else if (cat === 'deals') {
-        document.getElementById('btn-deals').classList.add('active');
-        title.innerText = "🔥 Angebote des Tages";
-        displayProducts(products.filter(p => p.isDeal));
-      } else {
-        const btn = document.getElementById(`btn-${cat}`);
-        if(btn) btn.classList.add('active');
-        displayProducts(products.filter(p => p.category === cat));
-      }
-    }
-
-    function performSearch() {
-      const query = document.getElementById('search-input').value.toLowerCase().trim();
-      const title = document.getElementById('grid-title');
-
-      if (!query) {
-        displayProducts(products);
-        title.innerText = "Alle Items";
-        return;
-      }
-
-      const filtered = products.filter(p => p.name.toLowerCase().includes(query));
-      title.innerText = `Suchergebnisse für "${query}" (${filtered.length})`;
-      displayProducts(filtered);
-    }
-
-    displayProducts(products);
-  </script>
-
-</body>
-</html>
+        document.getElementById('btn-deals').classList.add('active
