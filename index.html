@@ -221,7 +221,7 @@
       { name: "Karmesinstamm", priceNum: 2, curr: "Eisen", category: "bau", icon: "🔴" },
       { name: "Wirrstamm", priceNum: 2, curr: "Eisen", category: "bau", icon: "🔵" },
       { name: "Holzbretter (Eiche/Fichte/Birke)", priceNum: 1, curr: "Eisen", category: "bau", icon: "🪵" },
-      { name: "Holzzun / Zauntor / Tür / Falltür", priceNum: 1, curr: "Eisen", category: "bau", icon: "🚪" },
+      { name: "Holzzaun / Zauntor / Tür / Falltür", priceNum: 1, curr: "Eisen", category: "bau", icon: "🚪" },
       { name: "Bruchstein (Cobblestone)", priceNum: 1, curr: "Eisen", category: "bau", icon: "🪨" },
       { name: "Glatter Stein", priceNum: 1, curr: "Eisen", category: "bau", icon: "🪨" },
       { name: "Granit (Poliert)", priceNum: 1, curr: "Eisen", category: "bau", icon: "🧱" },
@@ -269,4 +269,190 @@
       { name: "Gold Rüstungsset", priceNum: 4, curr: "Eisen", category: "tools", icon: "👑" },
       { name: "Netherit Rüstungsteil", priceNum: 12, curr: "Diamanten", category: "tools", icon: "🛡️" },
       { name: "Schildkrötenpanzer Helm", priceNum: 5, curr: "Eisen", category: "tools", icon: "🐢" },
-      { name: "Bogen / Armbrust", priceNum: 2, curr: "Eisen", category: "tools", icon: "🏹"
+      { name: "Bogen / Armbrust", priceNum: 2, curr: "Eisen", category: "tools", icon: "🏹" },
+      { name: "Dreizack (Trident)", priceNum: 12, curr: "Diamanten", category: "tools", icon: "🔱" },
+      { name: "Keule (Mace)", priceNum: 20, curr: "Diamanten", category: "tools", icon: "🔨" },
+      { name: "Schild / Fernglas / Pinsel", priceNum: 2, curr: "Eisen", category: "tools", icon: "🛡️" },
+      { name: "Angel / Karottenrute", priceNum: 1, curr: "Eisen", category: "tools", icon: "🎣" },
+      { name: "Elytra", priceNum: 18, curr: "Diamanten", category: "tools", icon: "🪽" },
+      { name: "Apfel / Beeren", priceNum: 1, curr: "Eisen", category: "food", icon: "🍎" },
+      { name: "Goldener Apfel", priceNum: 3, curr: "Diamanten", category: "food", icon: "🍏" },
+      { name: "Verzauberter Goldener Apfel", priceNum: 12, curr: "Diamanten", category: "food", icon: "✨" },
+      { name: "Karotte / Kartoffel / Rübe", priceNum: 1, curr: "Eisen", category: "food", icon: "🥕" },
+      { name: "Brot / Keks / Kuchen", priceNum: 1, curr: "Eisen", category: "food", icon: "🍞" },
+      { name: "Gegartes Fleisch", priceNum: 1, curr: "Eisen", category: "food", icon: "🥩" },
+      { name: "Fisch (Kabeljau/Lachs)", priceNum: 1, curr: "Eisen", category: "food", icon: "🐟" },
+      { name: "Braustand / Kessel", priceNum: 2, curr: "Eisen", category: "brew", icon: "🧪" },
+      { name: "Netherwarze / Lohenstaub", priceNum: 2, curr: "Eisen", category: "brew", icon: "🔥" },
+      { name: "Trank der Regeneration / Schnelligkeit", priceNum: 2, curr: "Eisen", category: "brew", icon: "🧪" },
+      { name: "Trank des Feuerschutzes / Stärke", priceNum: 2, curr: "Eisen", category: "brew", icon: "🧪" },
+      { name: "Wurftrank / Verweildauer-Trank", priceNum: 3, curr: "Eisen", category: "brew", icon: "💥" },
+      { name: "Enderperle / Schleimball", priceNum: 1, curr: "Eisen", category: "craft", icon: "🔮" },
+      { name: "Netherstern", priceNum: 15, curr: "Diamanten", category: "craft", icon: "⭐" },
+      { name: "Nautilus-Schale / Herz des Meeres", priceNum: 4, curr: "Diamanten", category: "craft", icon: "🐚" },
+      { name: "Töpferscherben", priceNum: 2, curr: "Eisen", category: "craft", icon: "🏺" },
+      { name: "Rüstungsbesatz-Schablone (Trim)", priceNum: 5, curr: "Diamanten", category: "craft", icon: "📜" }
+    ];
+
+    additionalItems.forEach(item => {
+      products.push({
+        id: idCounter++,
+        name: item.name,
+        priceNum: item.priceNum,
+        curr: item.curr,
+        category: item.category,
+        icon: item.icon
+      });
+    });
+
+    let cart = [];
+
+    function getHourlyDeals() {
+      const currentHour = new Date().getHours();
+      let dealIndices = [];
+      for(let i = 0; i < 8; i++) {
+        let index = (currentHour * 13 + i * 29) % products.length;
+        dealIndices.push(index);
+      }
+      return dealIndices;
+    }
+
+    function displayProducts(items) {
+      const grid = document.getElementById('product-grid');
+      const noResults = document.getElementById('no-results');
+      grid.innerHTML = '';
+
+      if (!items || items.length === 0) {
+        noResults.style.display = 'block';
+        return;
+      }
+      noResults.style.display = 'none';
+
+      const hourlyDeals = getHourlyDeals();
+
+      items.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+
+        let isHourlyDeal = hourlyDeals.includes(p.id - 1);
+        let effectivePrice = p.priceNum;
+        let badge = '';
+        let priceHTML = '';
+
+        if (isHourlyDeal && p.priceNum > 1) {
+          effectivePrice = Math.max(1, Math.floor(p.priceNum * 0.7));
+          badge = `<div class="deal-badge">STÜNDLICHER DEAL</div>`;
+          priceHTML = `<span class="old-price">${p.priceNum}x ${p.curr}</span><span class="current-price">${effectivePrice}x ${p.curr} / Stk.</span>`;
+        } else {
+          priceHTML = `<span class="current-price">${p.priceNum}x ${p.curr} / Stk.</span>`;
+        }
+
+        card.innerHTML = `
+          ${badge}
+          <div>
+            <div class="product-icon">${p.icon}</div>
+            <div class="product-title">${p.name}</div>
+            <div class="price-box">${priceHTML}</div>
+          </div>
+          <div>
+            <div class="qty-box">
+              <label for="qty-${p.id}">Menge:</label>
+              <input type="number" id="qty-${p.id}" value="1" min="1" max="64" onchange="validateQty(this)">
+            </div>
+            <button class="btn-add" onclick="addToCart(${p.id}, ${effectivePrice})">In den Einkaufswagen</button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function validateQty(input) {
+      let val = parseInt(input.value, 10);
+      if (isNaN(val) || val < 1) input.value = 1;
+      if (val > 64) input.value = 64;
+    }
+
+    function addToCart(productId, unitPrice) {
+      const p = products.find(prod => prod.id === productId);
+      const qtyInput = document.getElementById(`qty-${productId}`);
+      let qty = parseInt(qtyInput.value, 10);
+
+      if (isNaN(qty) || qty < 1) qty = 1;
+      if (qty > 64) qty = 64;
+
+      const totalPriceNum = unitPrice * qty;
+      const title = `${qty}x ${p.name}`;
+      const priceText = `${totalPriceNum}x ${p.curr}`;
+
+      cart.push({ title, priceText });
+      renderCart();
+    }
+
+    function renderCart() {
+      const cartItemsDiv = document.getElementById('cart-items');
+      const hiddenInput = document.getElementById('hidden-cart-input');
+      const submitBtn = document.getElementById('submit-btn');
+
+      if (cart.length === 0) {
+        cartItemsDiv.innerHTML = '<p style="color: #777; font-size: 13px;">Dein Einkaufswagen ist leer.</p>';
+        submitBtn.disabled = true;
+        hiddenInput.value = '';
+        return;
+      }
+
+      cartItemsDiv.innerHTML = '';
+      let summaryText = [];
+
+      cart.forEach((item) => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'cart-item';
+        itemDiv.innerHTML = `<span>${item.title}</span> <b>${item.priceText}</b>`;
+        cartItemsDiv.appendChild(itemDiv);
+        summaryText.push(`${item.title} -> ${item.priceText}`);
+      });
+
+      hiddenInput.value = summaryText.join(' | ');
+      submitBtn.disabled = false;
+    }
+
+    function filterCategory(cat) {
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      const title = document.getElementById('grid-title');
+      document.getElementById('search-input').value = '';
+
+      if (cat === 'all') {
+        document.getElementById('btn-all').classList.add('active');
+        title.innerText = "Alle Items";
+        displayProducts(products);
+      } else if (cat === 'deals') {
+        document.getElementById('btn-deals').classList.add('active');
+        title.innerText = "🔥 Angebote des Tages (Wechseln stündlich!)";
+        const hourlyDeals = getHourlyDeals();
+        displayProducts(products.filter(p => hourlyDeals.includes(p.id - 1)));
+      } else {
+        const btn = document.getElementById(`btn-${cat}`);
+        if(btn) btn.classList.add('active');
+        displayProducts(products.filter(p => p.category === cat));
+      }
+    }
+
+    function performSearch() {
+      const query = document.getElementById('search-input').value.toLowerCase().trim();
+      const title = document.getElementById('grid-title');
+
+      if (!query) {
+        displayProducts(products);
+        title.innerText = "Alle Items";
+        return;
+      }
+
+      const filtered = products.filter(p => p.name.toLowerCase().includes(query));
+      title.innerText = `Suchergebnisse für "${query}" (${filtered.length})`;
+      displayProducts(filtered);
+    }
+
+    displayProducts(products);
+  </script>
+
+</body>
+</html>
