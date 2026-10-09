@@ -3,57 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MineZone - Dein Minecraft Block Shop</title>
+  <title>MineZone - Alle Minecraft Blöcke & Items</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
     body { background-color: #eaeded; color: #0f1111; }
     
-    /* Header */
     header { background-color: #131921; color: white; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; gap: 15px; }
-    .logo { font-size: 24px; font-weight: bold; color: #ff9900; text-decoration: none; cursor: pointer; }
+    .logo { font-size: 24px; font-weight: bold; color: #ff9900; cursor: pointer; }
     .logo span { color: white; }
     .search-bar { flex-grow: 1; max-width: 500px; display: flex; }
     .search-bar input { width: 100%; padding: 8px 12px; border: none; border-radius: 4px 0 0 4px; font-size: 14px; outline: none; }
     .search-bar button { background-color: #febd69; border: none; padding: 8px 16px; border-radius: 0 4px 4px 0; cursor: pointer; font-weight: bold; }
     
-    /* Kategorien Navigation */
-    nav { background-color: #232f3e; padding: 10px 20px; display: flex; gap: 10px; flex-wrap: wrap; }
-    .nav-btn { background: transparent; border: 1px solid #ff9900; color: white; padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 13px; font-weight: bold; }
+    nav { background-color: #232f3e; padding: 10px 20px; display: flex; gap: 8px; flex-wrap: wrap; }
+    .nav-btn { background: transparent; border: 1px solid #ff9900; color: white; padding: 6px 12px; border-radius: 20px; cursor: pointer; font-size: 12px; font-weight: bold; }
     .nav-btn:hover, .nav-btn.active { background-color: #ff9900; color: #131921; }
 
-    /* Banner */
-    .hero-banner { background: #232f3e; color: white; padding: 20px; text-align: center; border-bottom: 3px solid #ff9900; margin-bottom: 20px; }
-    .hero-banner h1 { font-size: 24px; margin-bottom: 5px; }
-    .hero-banner p { font-size: 14px; color: #ddd; }
+    .hero-banner { background: #232f3e; color: white; padding: 18px; text-align: center; border-bottom: 3px solid #ff9900; margin-bottom: 20px; }
+    .hero-banner h1 { font-size: 22px; margin-bottom: 5px; }
+    .hero-banner p { font-size: 13px; color: #ddd; }
 
-    /* Layout */
     .container { max-width: 1200px; margin: 0 auto 30px auto; padding: 0 20px; display: grid; grid-template-columns: 2.5fr 1fr; gap: 20px; }
     
-    /* Produkte */
-    .section-title { font-size: 20px; font-weight: bold; margin-bottom: 15px; }
+    .section-title { font-size: 18px; font-weight: bold; margin-bottom: 15px; }
     .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
-    .product-card { background: white; padding: 15px; border-radius: 8px; border: 1px solid #ddd; text-align: center; display: flex; flex-direction: column; justify-content: space-between; position: relative; }
+    .product-card { background: white; padding: 12px; border-radius: 8px; border: 1px solid #ddd; text-align: center; display: flex; flex-direction: column; justify-content: space-between; position: relative; }
     
-    .deal-badge { position: absolute; top: 8px; left: 8px; background-color: #cc0c39; color: white; font-size: 10px; font-weight: bold; padding: 3px 6px; border-radius: 3px; }
-    .product-icon { font-size: 40px; margin: 10px 0; }
-    .product-title { font-size: 15px; font-weight: bold; margin-bottom: 5px; }
+    .deal-badge { position: absolute; top: 8px; left: 8px; background-color: #cc0c39; color: white; font-size: 10px; font-weight: bold; padding: 2px 5px; border-radius: 3px; }
+    .product-icon { font-size: 38px; margin: 8px 0; }
+    .product-title { font-size: 14px; font-weight: bold; margin-bottom: 5px; }
+    .product-unit { font-size: 11px; color: #666; margin-bottom: 5px; }
     
-    .price-box { margin-bottom: 10px; }
-    .old-price { text-decoration: line-through; color: #777; font-size: 12px; margin-right: 5px; }
-    .current-price { color: #b12704; font-size: 15px; font-weight: bold; }
+    .price-box { margin-bottom: 8px; }
+    .old-price { text-decoration: line-through; color: #777; font-size: 11px; margin-right: 5px; }
+    .current-price { color: #b12704; font-size: 14px; font-weight: bold; }
     
-    .btn-add { background-color: #ffd814; border: 1px solid #fcd200; border-radius: 20px; padding: 8px; cursor: pointer; font-weight: bold; width: 100%; }
+    .qty-box { display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 8px; font-size: 12px; }
+    .qty-box input { width: 60px; padding: 4px; border-radius: 4px; border: 1px solid #ccc; font-weight: bold; text-align: center; }
+
+    .btn-add { background-color: #ffd814; border: 1px solid #fcd200; border-radius: 20px; padding: 7px; cursor: pointer; font-weight: bold; width: 100%; font-size: 13px; }
     .btn-add:hover { background-color: #f7ca00; }
     
-    /* Warenkorb */
-    .cart-box { background: white; padding: 20px; border-radius: 8px; border: 1px solid #ddd; height: fit-content; }
-    .cart-box h2 { border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 15px; font-size: 18px; }
-    .cart-item { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; background: #f7f7f7; padding: 6px 10px; border-radius: 4px; }
+    .cart-box { background: white; padding: 18px; border-radius: 8px; border: 1px solid #ddd; height: fit-content; position: sticky; top: 20px; }
+    .cart-box h2 { border-bottom: 1px solid #ccc; padding-bottom: 8px; margin-bottom: 12px; font-size: 17px; }
+    .cart-item { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12px; background: #f7f7f7; padding: 6px 8px; border-radius: 4px; }
     
-    form { margin-top: 15px; display: flex; flex-direction: column; gap: 10px; }
-    form label { font-size: 12px; font-weight: bold; }
-    form input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
-    .btn-order { background-color: #ffa41c; border: 1px solid #ff8f00; border-radius: 20px; padding: 10px; cursor: pointer; font-weight: bold; font-size: 14px; margin-top: 10px; }
+    form { margin-top: 15px; display: flex; flex-direction: column; gap: 8px; }
+    form label { font-size: 11px; font-weight: bold; }
+    form input { width: 100%; padding: 7px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; }
+    .btn-order { background-color: #ffa41c; border: 1px solid #ff8f00; border-radius: 20px; padding: 10px; cursor: pointer; font-weight: bold; font-size: 14px; margin-top: 8px; }
     .btn-order:hover { background-color: #f08804; }
     .btn-order:disabled { background-color: #e7e7e7; border-color: #ddd; color: #888; cursor: not-allowed; }
 
@@ -66,31 +64,34 @@
   <header>
     <div class="logo" onclick="filterCategory('all')">Mine<span>Zone</span></div>
     <div class="search-bar">
-      <input type="text" id="search-input" placeholder="Minecraft Blöcke suchen...">
+      <input type="text" id="search-input" placeholder="Block oder Item suchen...">
       <button onclick="performSearch()">Suchen</button>
     </div>
   </header>
 
   <!-- Navigation -->
   <nav>
-    <button class="nav-btn active" id="btn-all" onclick="filterCategory('all')">Alle Artikel</button>
+    <button class="nav-btn active" id="btn-all" onclick="filterCategory('all')">Alle Items</button>
     <button class="nav-btn" id="btn-deals" onclick="filterCategory('deals')">🔥 Angebote</button>
-    <button class="nav-btn" id="btn-erz" onclick="filterCategory('erz')">⛏️ Erze</button>
+    <button class="nav-btn" id="btn-erz" onclick="filterCategory('erz')">⛏️ Erze & Seltenes</button>
     <button class="nav-btn" id="btn-bau" onclick="filterCategory('bau')">🧱 Baustoffe</button>
     <button class="nav-btn" id="btn-tools" onclick="filterCategory('tools')">⚔️ Ausrüstung</button>
+    <button class="nav-btn" id="btn-redstone" onclick="filterCategory('redstone')">⚡ Redstone</button>
+    <button class="nav-btn" id="btn-food" onclick="filterCategory('food')">🍎 Nahrung & Tränke</button>
+    <button class="nav-btn" id="btn-mob" onclick="filterCategory('mob')">🦴 Mob Drops</button>
   </nav>
 
   <!-- Banner -->
   <div class="hero-banner">
-    <h1>Willkommen bei MineZone ⛏️</h1>
-    <p>Bezahle bequem mit Eisen und Diamanten!</p>
+    <h1>Alle Minecraft Blöcke & Items ⛏️</h1>
+    <p>Bezahle nur mit Eisen & Diamanten | Wähle eine Menge von 1 bis 64 Stück!</p>
   </div>
 
   <div class="container">
     <!-- Produktliste -->
     <div>
-      <h2 class="section-title" id="grid-title">Alle Artikel</h2>
-      <div id="no-results">Keine Artikel gefunden.</div>
+      <h2 class="section-title" id="grid-title">Alle Items</h2>
+      <div id="no-results">Kein Item gefunden.</div>
       <div class="product-grid" id="product-grid"></div>
     </div>
 
@@ -98,7 +99,7 @@
     <div class="cart-box">
       <h2>Einkaufswagen</h2>
       <div id="cart-items">
-        <p style="color: #777; font-size: 14px;">Dein Einkaufswagen ist leer.</p>
+        <p style="color: #777; font-size: 13px;">Dein Einkaufswagen ist leer.</p>
       </div>
       
       <form action="https://formspree.io/f/mnpjdykk" method="POST">
@@ -119,132 +120,20 @@
   </div>
 
   <script>
-    // Alle Preise nur in Eisen und Diamanten
     const products = [
-      { id: 1, name: "Diamanterz Block", price: "12x Diamanten", oldPrice: "16x Diamanten", isDeal: true, dealText: "25% RABATT", category: "erz", icon: "💎" },
-      { id: 2, name: "Obsidian Block", price: "8x Eisen", oldPrice: "16x Eisen", isDeal: true, dealText: "50% RABATT", category: "bau", icon: "🔮" },
-      { id: 3, name: "Ziegelstein Block", price: "4x Eisen", oldPrice: "", isDeal: false, dealText: "", category: "bau", icon: "🧱" },
-      { id: 4, name: "Eichenholz Stamm", price: "2x Eisen", oldPrice: "", isDeal: false, dealText: "", category: "bau", icon: "🪵" },
-      { id: 5, name: "Golderz Block", price: "4x Diamanten", oldPrice: "6x Diamanten", isDeal: true, dealText: "ANGEBOT", category: "erz", icon: "🪙" },
-      { id: 6, name: "Netherit Spitzhacke", price: "24x Diamanten", oldPrice: "", isDeal: false, dealText: "", category: "tools", icon: "⛏️" },
-      { id: 7, name: "Diamantschwert", price: "8x Diamanten", oldPrice: "", isDeal: false, dealText: "", category: "tools", icon: "⚔️" },
-      { id: 8, name: "Eisenrüstung (Set)", price: "16x Eisen", oldPrice: "", isDeal: false, dealText: "", category: "tools", icon: "🛡️" }
-    ];
+      // ERZE & SELTENES
+      { id: 1, name: "Diamanterz", priceNum: 2, curr: "Diamanten", category: "erz", icon: "💎", isDeal: true, oldPrice: "3x Diamanten", dealText: "ANGEBOT" },
+      { id: 2, name: "Netheritingot", priceNum: 8, curr: "Diamanten", category: "erz", icon: "⬛", isDeal: false },
+      { id: 3, name: "Golderz", priceNum: 2, curr: "Eisen", category: "erz", icon: "🪙", isDeal: false },
+      { id: 4, name: "Eisenerz", priceNum: 1, curr: "Eisen", category: "erz", icon: "⚙️", isDeal: false },
+      { id: 5, name: "Lapis Lazuli", priceNum: 1, curr: "Eisen", category: "erz", icon: "🔵", isDeal: false },
+      { id: 6, name: "Quarz", priceNum: 1, curr: "Eisen", category: "erz", icon: "⚪", isDeal: false },
+      { id: 7, name: "Amethyst Splitter", priceNum: 1, curr: "Eisen", category: "erz", icon: "💜", isDeal: false },
 
-    let cart = [];
-
-    function displayProducts(items) {
-      const grid = document.getElementById('product-grid');
-      const noResults = document.getElementById('no-results');
-      grid.innerHTML = '';
-
-      if (items.length === 0) {
-        noResults.style.display = 'block';
-        return;
-      }
-      noResults.style.display = 'none';
-
-      items.forEach(p => {
-        const card = document.createElement('div');
-        card.className = 'product-card';
-
-        let badge = p.isDeal ? `<div class="deal-badge">${p.dealText}</div>` : '';
-        let price = p.oldPrice 
-          ? `<span class="old-price">${p.oldPrice}</span><span class="current-price">${p.price}</span>` 
-          : `<span class="current-price">${p.price}</span>`;
-
-        card.innerHTML = `
-          ${badge}
-          <div>
-            <div class="product-icon">${p.icon}</div>
-            <div class="product-title">${p.name}</div>
-            <div class="price-box">${price}</div>
-          </div>
-          <button class="btn-add" onclick="addToCart('${p.name}', '${p.price}')">In den Einkaufswagen</button>
-        `;
-        grid.appendChild(card);
-      });
-    }
-
-    function filterCategory(cat) {
-      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-      const title = document.getElementById('grid-title');
-      document.getElementById('search-input').value = '';
-
-      if (cat === 'all') {
-        document.getElementById('btn-all').classList.add('active');
-        title.innerText = "Alle Artikel";
-        displayProducts(products);
-      } else if (cat === 'deals') {
-        document.getElementById('btn-deals').classList.add('active');
-        title.innerText = "🔥 Angebote des Tages";
-        displayProducts(products.filter(p => p.isDeal));
-      } else if (cat === 'erz') {
-        document.getElementById('btn-erz').classList.add('active');
-        title.innerText = "⛏️ Erze";
-        displayProducts(products.filter(p => p.category === 'erz'));
-      } else if (cat === 'bau') {
-        document.getElementById('btn-bau').classList.add('active');
-        title.innerText = "🧱 Baustoffe";
-        displayProducts(products.filter(p => p.category === 'bau'));
-      } else if (cat === 'tools') {
-        document.getElementById('btn-tools').classList.add('active');
-        title.innerText = "⚔️ Ausrüstung";
-        displayProducts(products.filter(p => p.category === 'tools'));
-      }
-    }
-
-    function performSearch() {
-      const query = document.getElementById('search-input').value.toLowerCase().trim();
-      const title = document.getElementById('grid-title');
-
-      if (!query) {
-        displayProducts(products);
-        title.innerText = "Alle Artikel";
-        return;
-      }
-
-      const filtered = products.filter(p => p.name.toLowerCase().includes(query));
-      title.innerText = `Suchergebnisse für "${query}" (${filtered.length})`;
-      displayProducts(filtered);
-    }
-
-    function addToCart(name, price) {
-      cart.push({ name, price });
-      renderCart();
-    }
-
-    function renderCart() {
-      const cartItemsDiv = document.getElementById('cart-items');
-      const hiddenInput = document.getElementById('hidden-cart-input');
-      const submitBtn = document.getElementById('submit-btn');
-
-      if (cart.length === 0) {
-        cartItemsDiv.innerHTML = '<p style="color: #777; font-size: 14px;">Dein Einkaufswagen ist leer.</p>';
-        submitBtn.disabled = true;
-        hiddenInput.value = '';
-        return;
-      }
-
-      cartItemsDiv.innerHTML = '';
-      let summaryText = [];
-
-      cart.forEach(item => {
-        const itemDiv = document.createElement('div');
-        itemDiv.className = 'cart-item';
-        itemDiv.innerHTML = `<span>1x ${item.name}</span> <b>${item.price}</b>`;
-        cartItemsDiv.appendChild(itemDiv);
-        summaryText.push(`1x ${item.name} (${item.price})`);
-      });
-
-      hiddenInput.value = summaryText.join(', ');
-      submitBtn.disabled = false;
-    }
-
-    window.onload = function() {
-      displayProducts(products);
-    };
-  </script>
-
-</body>
-</html>
+      // BAUSTOFFE
+      { id: 8, name: "Obsidian", priceNum: 2, curr: "Eisen", category: "bau", icon: "🔮", isDeal: true, oldPrice: "4x Eisen", dealText: "50% RABATT" },
+      { id: 9, name: "Eichenholz Stamm", priceNum: 1, curr: "Eisen", category: "bau", icon: "🪵", isDeal: false },
+      { id: 10, name: "Bruchstein (Cobblestone)", priceNum: 1, curr: "Eisen", category: "bau", icon: "🪨", isDeal: false },
+      { id: 11, name: "Ziegelstein Block", priceNum: 1, curr: "Eisen", category: "bau", icon: "🧱", isDeal: false },
+      { id: 12, name: "Glas", priceNum: 1, curr: "Eisen", category: "bau", icon: "🪟", isDeal: false },
+      { id: 13, name: "Netherrack", priceNum: 1, curr: "Eisen", category: "bau", icon: "🔥", isDeal: false
