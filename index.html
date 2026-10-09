@@ -3,342 +3,214 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MineZone - Der große Minecraft Block & Item Shop</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>MineZone - Dein Minecraft Block Shop</title>
   <style>
-    body { background-color: #eaeded; color: #0f1111; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+    body { background-color: #eaeded; color: #0f1111; }
     
-    /* Scrollbar styling */
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: #f1f1f1; }
-    ::-webkit-scrollbar-thumb { background: #888; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #555; }
+    /* Header */
+    header { background-color: #131921; color: white; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; gap: 15px; }
+    .logo { font-size: 24px; font-weight: bold; color: #ff9900; text-decoration: none; cursor: pointer; }
+    .logo span { color: white; }
+    .search-bar { flex-grow: 1; max-width: 500px; display: flex; }
+    .search-bar input { width: 100%; padding: 8px 12px; border: none; border-radius: 4px 0 0 4px; font-size: 14px; outline: none; }
+    .search-bar button { background-color: #febd69; border: none; padding: 8px 16px; border-radius: 0 4px 4px 0; cursor: pointer; font-weight: bold; }
+    
+    /* Kategorien Navigation */
+    nav { background-color: #232f3e; padding: 10px 20px; display: flex; gap: 10px; flex-wrap: wrap; }
+    .nav-btn { background: transparent; border: 1px solid #ff9900; color: white; padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 13px; font-weight: bold; }
+    .nav-btn:hover, .nav-btn.active { background-color: #ff9900; color: #131921; }
 
-    .amazon-header { background-color: #131921; }
-    .amazon-subnav { background-color: #232f3e; }
-    .amazon-yellow { background-color: #ffd814; border-color: #fcd200; }
-    .amazon-yellow:hover { background-color: #f7ca00; }
-    .amazon-orange { background-color: #ffa41c; border-color: #ff8f00; }
-    .amazon-orange:hover { background-color: #f08804; }
-    .amazon-badge { background-color: #cc0c39; }
+    /* Banner */
+    .hero-banner { background: #232f3e; color: white; padding: 20px; text-align: center; border-bottom: 3px solid #ff9900; margin-bottom: 20px; }
+    .hero-banner h1 { font-size: 24px; margin-bottom: 5px; }
+    .hero-banner p { font-size: 14px; color: #ddd; }
+
+    /* Layout */
+    .container { max-width: 1200px; margin: 0 auto 30px auto; padding: 0 20px; display: grid; grid-template-columns: 2.5fr 1fr; gap: 20px; }
     
-    .price-text { color: #b12704; }
+    /* Produkte */
+    .section-title { font-size: 20px; font-weight: bold; margin-bottom: 15px; }
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
+    .product-card { background: white; padding: 15px; border-radius: 8px; border: 1px solid #ddd; text-align: center; display: flex; flex-direction: column; justify-content: space-between; position: relative; }
     
-    /* Minecraft Icon styling */
-    .mc-icon {
-      font-size: 2.5rem;
-      line-height: 1;
-      filter: drop-shadow(2px 3px 2px rgba(0,0,0,0.25));
-    }
+    .deal-badge { position: absolute; top: 8px; left: 8px; background-color: #cc0c39; color: white; font-size: 10px; font-weight: bold; padding: 3px 6px; border-radius: 3px; }
+    .product-icon { font-size: 40px; margin: 10px 0; }
+    .product-title { font-size: 15px; font-weight: bold; margin-bottom: 5px; }
+    
+    .price-box { margin-bottom: 10px; }
+    .old-price { text-decoration: line-through; color: #777; font-size: 12px; margin-right: 5px; }
+    .current-price { color: #b12704; font-size: 15px; font-weight: bold; }
+    
+    .btn-add { background-color: #ffd814; border: 1px solid #fcd200; border-radius: 20px; padding: 8px; cursor: pointer; font-weight: bold; width: 100%; }
+    .btn-add:hover { background-color: #f7ca00; }
+    
+    /* Warenkorb */
+    .cart-box { background: white; padding: 20px; border-radius: 8px; border: 1px solid #ddd; height: fit-content; }
+    .cart-box h2 { border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 15px; font-size: 18px; }
+    .cart-item { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; background: #f7f7f7; padding: 6px 10px; border-radius: 4px; }
+    
+    form { margin-top: 15px; display: flex; flex-direction: column; gap: 10px; }
+    form label { font-size: 12px; font-weight: bold; }
+    form input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+    .btn-order { background-color: #ffa41c; border: 1px solid #ff8f00; border-radius: 20px; padding: 10px; cursor: pointer; font-weight: bold; font-size: 14px; margin-top: 10px; }
+    .btn-order:hover { background-color: #f08804; }
+    .btn-order:disabled { background-color: #e7e7e7; border-color: #ddd; color: #888; cursor: not-allowed; }
+
+    #no-results { display: none; background: white; padding: 20px; border-radius: 8px; text-align: center; color: #555; }
   </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body>
 
-  <!-- Top Amazon Header -->
-  <header class="amazon-header text-white px-4 py-2.5 flex flex-wrap items-center justify-between gap-4 sticky top-0 z-50 shadow-md">
-    <div class="flex items-center gap-2 cursor-pointer" onclick="filterCategory('all')">
-      <span class="text-2xl font-extrabold text-amber-500 tracking-wider">Mine<span class="text-white">Zone</span></span>
-      <span class="text-xs bg-amber-500 text-black px-1.5 py-0.5 rounded font-bold uppercase">Pro</span>
-    </div>
-
-    <!-- Search Bar -->
-    <div class="flex-1 max-w-2xl flex items-center min-w-[280px]">
-      <input type="text" id="search-input" placeholder="Suche nach Diamant, Schwert, Redstone, TNT, Brot..." 
-             class="w-full px-3 py-2 text-black rounded-l-md outline-none text-sm focus:ring-2 focus:ring-amber-500"
-             onkeyup="handleSearchKey(event)">
-      <button onclick="performSearch()" class="bg-amber-400 hover:bg-amber-500 text-black font-bold px-5 py-2 rounded-r-md flex items-center justify-center transition">
-        🔍
-      </button>
-    </div>
-
-    <!-- Quick Stats -->
-    <div class="flex items-center gap-4 text-xs">
-      <div class="hidden sm:block">
-        <p class="text-gray-400">Lieferung an</p>
-        <p class="font-bold text-sm">🌐 Deinen Minecraft Server</p>
-      </div>
-      <div class="bg-gray-800 px-3 py-1.5 rounded border border-gray-700 flex items-center gap-2 cursor-pointer" onclick="scrollToCart()">
-        <span>🛒 Warenkorb:</span>
-        <span id="cart-badge" class="bg-amber-500 text-black font-extrabold px-2 py-0.5 rounded-full text-xs">0</span>
-      </div>
+  <!-- Header -->
+  <header>
+    <div class="logo" onclick="filterCategory('all')">Mine<span>Zone</span></div>
+    <div class="search-bar">
+      <input type="text" id="search-input" placeholder="Minecraft Blöcke suchen...">
+      <button onclick="performSearch()">Suchen</button>
     </div>
   </header>
 
-  <!-- Sub-Header Navigation (Categories) -->
-  <nav class="amazon-subnav text-white px-4 py-2 overflow-x-auto flex items-center gap-2 text-sm whitespace-nowrap shadow-inner">
-    <button class="cat-btn bg-amber-500 text-black px-3 py-1 rounded-full font-bold text-xs" id="btn-all" onclick="filterCategory('all', this)">Alle Items & Blöcke</button>
-    <button class="cat-btn hover:bg-gray-700 px-3 py-1 rounded-full text-xs font-medium" id="btn-deals" onclick="filterCategory('deals', this)">🔥 Angebote & Deals</button>
-    <button class="cat-btn hover:bg-gray-700 px-3 py-1 rounded-full text-xs font-medium" id="btn-erz" onclick="filterCategory('erz', this)">💎 Erze & Edelsteine</button>
-    <button class="cat-btn hover:bg-gray-700 px-3 py-1 rounded-full text-xs font-medium" id="btn-bau" onclick="filterCategory('bau', this)">🧱 Baustoffe</button>
-    <button class="cat-btn hover:bg-gray-700 px-3 py-1 rounded-full text-xs font-medium" id="btn-kampf" onclick="filterCategory('kampf', this)">⚔️ Waffen & Werkzeuge</button>
-    <button class="cat-btn hover:bg-gray-700 px-3 py-1 rounded-full text-xs font-medium" id="btn-redstone" onclick="filterCategory('redstone', this)">⚡ Redstone & Technik</button>
-    <button class="cat-btn hover:bg-gray-700 px-3 py-1 rounded-full text-xs font-medium" id="btn-food" onclick="filterCategory('food', this)">🍎 Nahrung & Tränke</button>
-    <button class="cat-btn hover:bg-gray-700 px-3 py-1 rounded-full text-xs font-medium" id="btn-misc" onclick="filterCategory('misc', this)">📦 Sonstiges</button>
+  <!-- Navigation -->
+  <nav>
+    <button class="nav-btn active" id="btn-all" onclick="filterCategory('all')">Alle Artikel</button>
+    <button class="nav-btn" id="btn-deals" onclick="filterCategory('deals')">🔥 Angebote</button>
+    <button class="nav-btn" id="btn-erz" onclick="filterCategory('erz')">⛏️ Erze</button>
+    <button class="nav-btn" id="btn-bau" onclick="filterCategory('bau')">🧱 Baustoffe</button>
+    <button class="nav-btn" id="btn-tools" onclick="filterCategory('tools')">⚔️ Ausrüstung</button>
   </nav>
 
-  <!-- Hero Banner -->
-  <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-zinc-900 text-white py-6 px-4 text-center border-b-4 border-amber-500">
-    <h1 class="text-2xl sm:text-3xl font-extrabold mb-1 tracking-tight">Riesiges Minecraft-Sortiment ⛏️</h1>
-    <p class="text-gray-300 text-sm max-w-xl mx-auto">Wähle aus allen Blöcken und Items. Express-Lieferung direkt an deine Koordinaten auf jedem Server!</p>
+  <!-- Banner -->
+  <div class="hero-banner">
+    <h1>Willkommen bei MineZone ⛏️</h1>
+    <p>Bezahle bequem mit Eisen und Diamanten!</p>
   </div>
 
-  <div class="max-w-7xl mx-auto p-4 flex-grow w-full grid grid-cols-1 lg:grid-cols-4 gap-6">
-    
-    <!-- Left Area: Catalog -->
-    <main class="lg:col-span-3">
-      <div class="flex justify-between items-center mb-4 bg-white p-3 rounded-lg border border-gray-200 shadow-sm">
-        <h2 id="grid-title" class="text-lg font-bold text-gray-800">Alle Minecraft Items & Blöcke</h2>
-        <span id="item-count" class="text-xs text-gray-500 font-semibold bg-gray-100 px-2.5 py-1 rounded-full">0 Produkte</span>
-      </div>
-
-      <!-- No Results Message -->
-      <div id="no-results" class="hidden bg-white p-8 rounded-lg text-center border border-gray-200 shadow-sm my-4">
-        <p class="text-4xl mb-2">🔍</p>
-        <p class="text-lg font-bold text-gray-700">Keine Items gefunden</p>
-        <p class="text-sm text-gray-500 mt-1">Überprüfe deine Suchanfrage oder wähle eine andere Kategorie.</p>
-        <button onclick="filterCategory('all')" class="mt-4 bg-amber-500 hover:bg-amber-600 text-black font-bold text-xs px-4 py-2 rounded-full">Alle Produkte anzeigen</button>
-      </div>
-
-      <!-- Product Grid -->
-      <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-        <!-- Javascript fills items here -->
-      </div>
-    </main>
-
-    <!-- Right Area: Cart & Checkout Form -->
-    <aside class="lg:col-span-1">
-      <div id="cart-box" class="bg-white p-5 rounded-lg border border-gray-200 shadow-sm sticky top-20">
-        <div class="flex items-center justify-between border-b pb-3 mb-4">
-          <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
-            <span>🛒</span> Einkaufswagen
-          </h2>
-          <button onclick="clearCart()" class="text-xs text-red-600 hover:underline">Leeren</button>
-        </div>
-
-        <!-- Selected Cart Items List -->
-        <div id="cart-items" class="max-h-60 overflow-y-auto pr-1 space-y-2 mb-4">
-          <p class="text-gray-400 text-xs text-center py-4">Dein Einkaufswagen ist leer.<br>Füge Blöcke oder Items hinzu!</p>
-        </div>
-
-        <div id="cart-summary" class="border-t pt-3 mb-4 hidden">
-          <div class="flex justify-between items-center font-bold text-sm text-gray-800">
-            <span>Gesamte Positionen:</span>
-            <span id="cart-total-count" class="text-amber-600">0</span>
-          </div>
-        </div>
-
-        <!-- Formspree Order Form -->
-        <form action="https://formspree.io/f/mnpjdykk" method="POST" class="space-y-3">
-          <!-- Hidden field holding order items details -->
-          <input type="hidden" name="Bestellung_Inhalt" id="hidden-cart-input">
-
-          <div>
-            <label for="gamertag" class="block text-xs font-bold text-gray-700 mb-1">Dein Minecraft Gamertag:*</label>
-            <input type="text" id="gamertag" name="Gamertag" placeholder="z.B. Steve_Crafting" required
-                   class="w-full p-2 border border-gray-300 rounded text-xs focus:ring-1 focus:ring-amber-500 outline-none">
-          </div>
-
-          <div>
-            <label for="coords" class="block text-xs font-bold text-gray-700 mb-1">Server & Koordinaten:*</label>
-            <input type="text" id="coords" name="Koordinaten" placeholder="z.B. Hypixel / X: 120, Y: 64, Z: -300" required
-                   class="w-full p-2 border border-gray-300 rounded text-xs focus:ring-1 focus:ring-amber-500 outline-none">
-          </div>
-
-          <div>
-            <label for="email" class="block text-xs font-bold text-gray-700 mb-1">Deine E-Mail-Adresse:*</label>
-            <input type="email" id="email" name="Kunden-Email" placeholder="deine@email.de" required
-                   class="w-full p-2 border border-gray-300 rounded text-xs focus:ring-1 focus:ring-amber-500 outline-none">
-          </div>
-
-          <button type="submit" id="submit-btn" disabled 
-                  class="amazon-orange w-full py-2.5 rounded-full font-bold text-xs text-black shadow hover:shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed">
-            Jetzt kostenpflichtig bestellen
-          </button>
-        </form>
-
-        <p class="text-[10px] text-gray-400 text-center mt-3">🔒 Sichere Übertragung via Formspree direkt an den Lieferdienst.</p>
-      </div>
-    </aside>
-
-  </div>
-
-  <footer class="amazon-header text-gray-400 text-xs py-6 mt-12 border-t border-gray-800">
-    <div class="max-w-7xl mx-auto px-4 text-center space-y-2">
-      <p class="font-bold text-amber-500 text-sm">MineZone Store</p>
-      <p>Alle Minecraft Marken und Inhalte sind Eigentum von Mojang AB / Microsoft. Keine offizielle Zugehörigkeit.</p>
-      <p>© 2026 MineZone. E-Mail Bestellservice direkt an Timo.</p>
+  <div class="container">
+    <!-- Produktliste -->
+    <div>
+      <h2 class="section-title" id="grid-title">Alle Artikel</h2>
+      <div id="no-results">Keine Artikel gefunden.</div>
+      <div class="product-grid" id="product-grid"></div>
     </div>
-  </footer>
+
+    <!-- Warenkorb -->
+    <div class="cart-box">
+      <h2>Einkaufswagen</h2>
+      <div id="cart-items">
+        <p style="color: #777; font-size: 14px;">Dein Einkaufswagen ist leer.</p>
+      </div>
+      
+      <form action="https://formspree.io/f/mnpjdykk" method="POST">
+        <input type="hidden" name="Bestellung" id="hidden-cart-input">
+        
+        <label for="gamertag">Dein Minecraft Name / Gamertag:</label>
+        <input type="text" id="gamertag" name="Gamertag" placeholder="z.B. Steve123" required>
+
+        <label for="coords">Deine Koordinaten / Server-Infos:</label>
+        <input type="text" id="coords" name="Koordinaten" placeholder="z.B. X: 100, Y: 64, Z: -200" required>
+
+        <label for="email">Deine E-Mail-Adresse:</label>
+        <input type="email" id="email" name="Kunden-Email" placeholder="deine@email.de" required>
+
+        <button type="submit" class="btn-order" id="submit-btn" disabled>Jetzt Bestellung abschicken</button>
+      </form>
+    </div>
+  </div>
 
   <script>
-    // Huge Minecraft Item & Block Database
+    // Alle Preise nur in Eisen und Diamanten
     const products = [
-      // --- ERZE & EDELSTEINE ---
-      { id: 1, name: "Diamanterz Block", price: "48x Smaragde", oldPrice: "64x Smaragde", isDeal: true, dealText: "25% RABATT", category: "erz", icon: "💎", tags: "diamant diamond ore" },
-      { id: 2, name: "Netheritbarren (1x)", price: "64x Diamanten", oldPrice: "80x Diamanten", isDeal: true, dealText: "TOP DEAL", category: "erz", icon: "⬛", tags: "netherite ingot barren" },
-      { id: 3, name: "Smaragderz Block", price: "32x Diamanten", oldPrice: "", isDeal: false, dealText: "", category: "erz", icon: "🟢", tags: "smaragd emerald" },
-      { id: 4, name: "Golderz Block", price: "20x Smaragde", oldPrice: "32x Smaragde", isDeal: true, dealText: "ANGEBOT", category: "erz", icon: "🪙", tags: "gold ore" },
-      { id: 5, name: "Eisenerz Block", price: "12x Kohle", oldPrice: "", isDeal: false, dealText: "", category: "erz", icon: "⚙️", tags: "eisen iron ore" },
-      { id: 6, name: "Lapis Lazuli Block", price: "16x Eisen", oldPrice: "", isDeal: false, dealText: "", category: "erz", icon: "🔵", tags: "lapis blau zauber" },
-      { id: 7, name: "Kohleerz Block", price: "8x Pflasterstein", oldPrice: "", isDeal: false, dealText: "", category: "erz", icon: "🖤", tags: "kohle coal" },
-      { id: 8, name: "Amethyst Haufen", price: "16x Smaragde", oldPrice: "", isDeal: false, dealText: "", category: "erz", icon: "💜", tags: "amethyst lila kristall" },
-
-      // --- BAUSTOFFE ---
-      { id: 9, name: "Obsidian Block", price: "16x Redstone", oldPrice: "32x Redstone", isDeal: true, dealText: "50% RABATT", category: "bau", icon: "🔮", tags: "obsidian portal lila" },
-      { id: 10, name: "Eichenholz Stamm (64x)", price: "8x Kohle", oldPrice: "", isDeal: false, dealText: "", category: "bau", icon: "🪵", tags: "holz eiche stamm stape" },
-      { id: 11, name: "Ziegelstein Block (64x)", price: "16x Eisen", oldPrice: "", isDeal: false, dealText: "", category: "bau", icon: "🧱", tags: "ziegel stein haus" },
-      { id: 12, name: "Bruchstein / Cobblestone (64x)", price: "4x Kohle", oldPrice: "", isDeal: false, dealText: "", category: "bau", icon: "🪨", tags: "bruchstein cobblestone stein" },
-      { id: 13, name: "Quarzblock (64x)", price: "24x Eisen", oldPrice: "", isDeal: false, dealText: "", category: "bau", icon: "⬜", tags: "quarz weiß nether" },
-      { id: 14, name: "Endstein Block (64x)", price: "32x Smaragde", oldPrice: "", isDeal: false, dealText: "", category: "bau", icon: "🟡", tags: "end endstein drache" },
-      { id: 15, name: "Glatteis Block (64x)", price: "16x Smaragde", oldPrice: "", isDeal: false, dealText: "", category: "bau", icon: "🧊", tags: "eis glatteis blau" },
-      { id: 16, name: "Seelensand (64x)", price: "12x Eisen", oldPrice: "", isDeal: false, dealText: "", category: "bau", icon: "🤎", tags: "seelensand nether wither" },
-      { id: 17, name: "Glas Blöcke (64x)", price: "8x Eisen", oldPrice: "", isDeal: false, dealText: "", category: "bau", icon: "🪟", tags: "glas fenster" },
-
-      // --- WAFFEN & WERKZEUGE ---
-      { id: 18, name: "Netheritschwert (Perfekt)", price: "128x Smaragde", oldPrice: "160x Smaragde", isDeal: true, dealText: "HERO DEAL", category: "kampf", icon: "🗡️", tags: "schwert netherit waffe pvp" },
-      { id: 19, name: "Diamant Spitzhacke", price: "24x Smaragde", oldPrice: "", isDeal: false, dealText: "", category: "kampf", icon: "⛏️", tags: "spitzhacke diamanten werkzeug" },
-      { id: 20, name: "Bogen mit Unendlichkeit", price: "32x Smaragde", oldPrice: "", isDeal: false, dealText: "", category: "kampf", icon: "🏹", tags: "bogen feil waffe" },
-      { id: 21, name: "Elytra (Drachenflügel)", price: "128x Smaragde", oldPrice: "200x Smaragde", isDeal: true, dealText: "HOT DEAL", category: "kampf", icon: "🪽", tags: "elytra fliegen drache end" },
-      { id: 22, name: "Netherit Rüstungs-Set", price: "256x Smaragde", oldPrice: "", isDeal: false, dealText: "", category: "kampf", icon: "🛡️", tags: "rüstung netherit helm brust" },
-      { id: 23, name: "Dreizack (Trident)", price: "64x Smaragde", oldPrice: "", isDeal: false, dealText: "", category: "kampf", icon: "🔱", tags: "dreizack trident wasser" },
-
-      // --- REDSTONE & TECHNIK ---
-      { id: 24, name: "Redstone Staub (64x)", price: "12x Eisen", oldPrice: "", isDeal: false, dealText: "", category: "redstone", icon: "🔴", tags: "redstone staub technik" },
-      { id: 25, name: "TNT Sprengstoff (16x)", price: "32x Eisen", oldPrice: "48x Eisen", isDeal: true, dealText: "BOOM SALE", category: "redstone", icon: "🧨", tags: "tnt bombe sprengen" },
-      { id: 26, name: "Klebriger Kolben / Piston", price: "8x Eisen", oldPrice: "", isDeal: false, dealText: "", category: "redstone", icon: "🟩", tags: "piston kolben klebrig" },
-      { id: 27, name: "Trichter / Hopper", price: "16x Eisen", oldPrice: "", isDeal: false, dealText: "", category: "redstone", icon: "🔻", tags: "hopper trichter kiste" },
-      { id: 28, name: "Redstone Verstärker (8x)", price: "10x Eisen", oldPrice: "", isDeal: false, dealText: "", category: "redstone", icon: "📻", tags: "repeater verstärker" },
-
-      // --- NAHRUNG & TRÄNKE ---
-      { id: 29, name: "Goldener Apfel (Op-Apfel)", price: "64x Smaragde", oldPrice: "96x Smaragde", isDeal: true, dealText: "OP ITEM", category: "food", icon: "🍏", tags: "apfel gold op gapple essen" },
-      { id: 30, name: "Gebratenes Rindfleisch (64x)", price: "8x Smaragde", oldPrice: "", isDeal: false, dealText: "", category: "food", icon: "🥩", tags: "fleisch essen steak" },
-      { id: 31, name: "Heilungstrank II (3x)", price: "12x Smaragde", oldPrice: "", isDeal: false, dealText: "", category: "food", icon: "🧪", tags: "trank heilung leben" },
-      { id: 32, name: "Brot Stack (64x)", price: "4x Smaragde", oldPrice: "", isDeal: false, dealText: "", category: "food", icon: "🍞", tags: "brot weizen essen" },
-
-      // --- SONSTIGES ---
-      { id: 33, name: "Beacon (Leuchtfeuer)", price: "128x Smaragde", oldPrice: "180x Smaragde", isDeal: true, dealText: "RARE", category: "misc", icon: "🌟", tags: "beacon leuchtfeuer wither" },
-      { id: 34, name: "Enderperlen (16x)", price: "16x Smaragde", oldPrice: "", isDeal: false, dealText: "", category: "misc", icon: "🟢", tags: "enderperle teleport" },
-      { id: 35, name: "Totem der Unsterblichkeit", price: "64x Smaragde", oldPrice: "", isDeal: false, dealText: "", category: "misc", icon: "🗿", tags: "totem leben unsterblich" },
-      { id: 36, name: "Erschaffungs-Ei (Villager)", price: "96x Smaragde", oldPrice: "", isDeal: false, dealText: "", category: "misc", icon: "🥚", tags: "egg ei villager dorfbewohner" }
+      { id: 1, name: "Diamanterz Block", price: "12x Diamanten", oldPrice: "16x Diamanten", isDeal: true, dealText: "25% RABATT", category: "erz", icon: "💎" },
+      { id: 2, name: "Obsidian Block", price: "8x Eisen", oldPrice: "16x Eisen", isDeal: true, dealText: "50% RABATT", category: "bau", icon: "🔮" },
+      { id: 3, name: "Ziegelstein Block", price: "4x Eisen", oldPrice: "", isDeal: false, dealText: "", category: "bau", icon: "🧱" },
+      { id: 4, name: "Eichenholz Stamm", price: "2x Eisen", oldPrice: "", isDeal: false, dealText: "", category: "bau", icon: "🪵" },
+      { id: 5, name: "Golderz Block", price: "4x Diamanten", oldPrice: "6x Diamanten", isDeal: true, dealText: "ANGEBOT", category: "erz", icon: "🪙" },
+      { id: 6, name: "Netherit Spitzhacke", price: "24x Diamanten", oldPrice: "", isDeal: false, dealText: "", category: "tools", icon: "⛏️" },
+      { id: 7, name: "Diamantschwert", price: "8x Diamanten", oldPrice: "", isDeal: false, dealText: "", category: "tools", icon: "⚔️" },
+      { id: 8, name: "Eisenrüstung (Set)", price: "16x Eisen", oldPrice: "", isDeal: false, dealText: "", category: "tools", icon: "🛡️" }
     ];
 
     let cart = [];
 
-    // Render Product Cards dynamically
     function displayProducts(items) {
       const grid = document.getElementById('product-grid');
       const noResults = document.getElementById('no-results');
-      const countLabel = document.getElementById('item-count');
-      
       grid.innerHTML = '';
-      countLabel.innerText = `${items.length} Produkte`;
 
       if (items.length === 0) {
-        noResults.classList.remove('hidden');
+        noResults.style.display = 'block';
         return;
       }
-      noResults.classList.add('hidden');
+      noResults.style.display = 'none';
 
       items.forEach(p => {
         const card = document.createElement('div');
-        card.className = "bg-white p-3.5 rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition flex flex-col justify-between relative group";
+        card.className = 'product-card';
 
-        let badge = p.isDeal ? `<span class="amazon-badge text-white text-[10px] font-extrabold px-2 py-0.5 rounded absolute top-2 left-2 uppercase tracking-wider">${p.dealText}</span>` : '';
-        let priceHTML = p.oldPrice 
-          ? `<span class="text-xs text-gray-400 line-through mr-1">${p.oldPrice}</span><span class="price-text text-sm font-extrabold">${p.price}</span>` 
-          : `<span class="price-text text-sm font-extrabold">${p.price}</span>`;
+        let badge = p.isDeal ? `<div class="deal-badge">${p.dealText}</div>` : '';
+        let price = p.oldPrice 
+          ? `<span class="old-price">${p.oldPrice}</span><span class="current-price">${p.price}</span>` 
+          : `<span class="current-price">${p.price}</span>`;
 
         card.innerHTML = `
           ${badge}
-          <div class="text-center pt-2 pb-1">
-            <div class="mc-icon mb-2 transition transform group-hover:scale-110">${p.icon}</div>
-            <h3 class="font-bold text-xs text-gray-800 line-clamp-2 min-h-[32px]">${p.name}</h3>
-            <div class="mt-1 mb-3">${priceHTML}</div>
+          <div>
+            <div class="product-icon">${p.icon}</div>
+            <div class="product-title">${p.name}</div>
+            <div class="price-box">${price}</div>
           </div>
-          <button onclick="addToCart('${p.name.replace(/'/g, "\\'")}', '${p.price}')" 
-                  class="amazon-yellow w-full py-1.5 rounded-full font-bold text-xs text-black shadow-sm transition active:scale-95">
-            + In den Einkaufswagen
-          </button>
+          <button class="btn-add" onclick="addToCart('${p.name}', '${p.price}')">In den Einkaufswagen</button>
         `;
         grid.appendChild(card);
       });
     }
 
-    // Category Filtering
-    function filterCategory(cat, btn) {
-      // Update Button Styles
-      document.querySelectorAll('.cat-btn').forEach(b => {
-        b.className = 'cat-btn hover:bg-gray-700 px-3 py-1 rounded-full text-xs font-medium text-white';
-      });
-
-      if (btn) {
-        btn.className = 'cat-btn bg-amber-500 text-black px-3 py-1 rounded-full font-bold text-xs';
-      } else {
-        document.getElementById('btn-all').className = 'cat-btn bg-amber-500 text-black px-3 py-1 rounded-full font-bold text-xs';
-      }
-
+    function filterCategory(cat) {
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
       const title = document.getElementById('grid-title');
       document.getElementById('search-input').value = '';
 
       if (cat === 'all') {
-        title.innerText = "Alle Minecraft Items & Blöcke";
+        document.getElementById('btn-all').classList.add('active');
+        title.innerText = "Alle Artikel";
         displayProducts(products);
       } else if (cat === 'deals') {
-        title.innerText = "🔥 Sonderangebote & Deals";
+        document.getElementById('btn-deals').classList.add('active');
+        title.innerText = "🔥 Angebote des Tages";
         displayProducts(products.filter(p => p.isDeal));
       } else if (cat === 'erz') {
-        title.innerText = "💎 Erze & Edelsteine";
+        document.getElementById('btn-erz').classList.add('active');
+        title.innerText = "⛏️ Erze";
         displayProducts(products.filter(p => p.category === 'erz'));
       } else if (cat === 'bau') {
-        title.innerText = "🧱 Baustoffe & Blöcke";
+        document.getElementById('btn-bau').classList.add('active');
+        title.innerText = "🧱 Baustoffe";
         displayProducts(products.filter(p => p.category === 'bau'));
-      } else if (cat === 'kampf') {
-        title.innerText = "⚔️ Waffen, Werkzeuge & Elytra";
-        displayProducts(products.filter(p => p.category === 'kampf'));
-      } else if (cat === 'redstone') {
-        title.innerText = "⚡ Redstone & Technik";
-        displayProducts(products.filter(p => p.category === 'redstone'));
-      } else if (cat === 'food') {
-        title.innerText = "🍎 Nahrung & Tränke";
-        displayProducts(products.filter(p => p.category === 'food'));
-      } else if (cat === 'misc') {
-        title.innerText = "📦 Sonstiges & Spezial-Items";
-        displayProducts(products.filter(p => p.category === 'misc'));
+      } else if (cat === 'tools') {
+        document.getElementById('btn-tools').classList.add('active');
+        title.innerText = "⚔️ Ausrüstung";
+        displayProducts(products.filter(p => p.category === 'tools'));
       }
     }
 
-    // Live Search Logic
     function performSearch() {
       const query = document.getElementById('search-input').value.toLowerCase().trim();
       const title = document.getElementById('grid-title');
 
       if (!query) {
         displayProducts(products);
-        title.innerText = "Alle Minecraft Items & Blöcke";
+        title.innerText = "Alle Artikel";
         return;
       }
 
-      const filtered = products.filter(p => 
-        p.name.toLowerCase().includes(query) || 
-        p.tags.toLowerCase().includes(query)
-      );
-
-      title.innerText = `Suchergebnisse für "${query}"`;
+      const filtered = products.filter(p => p.name.toLowerCase().includes(query));
+      title.innerText = `Suchergebnisse für "${query}" (${filtered.length})`;
       displayProducts(filtered);
     }
 
-    function handleSearchKey(event) {
-      performSearch();
-    }
-
-    // Cart Management
     function addToCart(name, price) {
       cart.push({ name, price });
-      renderCart();
-    }
-
-    function clearCart() {
-      cart = [];
       renderCart();
     }
 
@@ -346,57 +218,33 @@
       const cartItemsDiv = document.getElementById('cart-items');
       const hiddenInput = document.getElementById('hidden-cart-input');
       const submitBtn = document.getElementById('submit-btn');
-      const badge = document.getElementById('cart-badge');
-      const summary = document.getElementById('cart-summary');
-      const totalCount = document.getElementById('cart-total-count');
-
-      badge.innerText = cart.length;
 
       if (cart.length === 0) {
-        cartItemsDiv.innerHTML = '<p class="text-gray-400 text-xs text-center py-4">Dein Einkaufswagen ist leer.<br>Füge Blöcke oder Items hinzu!</p>';
+        cartItemsDiv.innerHTML = '<p style="color: #777; font-size: 14px;">Dein Einkaufswagen ist leer.</p>';
         submitBtn.disabled = true;
         hiddenInput.value = '';
-        summary.classList.add('hidden');
         return;
       }
 
-      summary.classList.remove('hidden');
-      totalCount.innerText = cart.length;
       cartItemsDiv.innerHTML = '';
-      
       let summaryText = [];
 
-      cart.forEach((item, index) => {
+      cart.forEach(item => {
         const itemDiv = document.createElement('div');
-        itemDiv.className = 'flex justify-between items-center text-xs bg-gray-50 p-2 rounded border border-gray-200';
-        itemDiv.innerHTML = `
-          <div class="truncate mr-2">
-            <span class="font-bold text-gray-800">1x ${item.name}</span>
-            <div class="text-[10px] text-red-700 font-semibold">${item.price}</div>
-          </div>
-          <button onclick="removeFromCart(${index})" class="text-gray-400 hover:text-red-600 font-bold px-1">✕</button>
-        `;
+        itemDiv.className = 'cart-item';
+        itemDiv.innerHTML = `<span>1x ${item.name}</span> <b>${item.price}</b>`;
         cartItemsDiv.appendChild(itemDiv);
-        summaryText.push(`1x ${item.name} [Preis: ${item.price}]`);
+        summaryText.push(`1x ${item.name} (${item.price})`);
       });
 
-      hiddenInput.value = summaryText.join(' | ');
+      hiddenInput.value = summaryText.join(', ');
       submitBtn.disabled = false;
     }
 
-    function removeFromCart(index) {
-      cart.splice(index, 1);
-      renderCart();
-    }
-
-    function scrollToCart() {
-      document.getElementById('cart-box').scrollIntoView({ behavior: 'smooth' });
-    }
-
-    // Initialization
     window.onload = function() {
       displayProducts(products);
     };
   </script>
+
 </body>
 </html>
