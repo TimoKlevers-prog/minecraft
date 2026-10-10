@@ -165,5 +165,8 @@
           <p style="color: #777; font-size: 13px;">Dein Einkaufswagen ist leer.</p>
         </div>
         
-        <!-- Button zum Leeren des Warenkorbs -->
-        <button type="button
+        <button type="button" class="btn-clear" id="clear-cart-btn" onclick="clearCart()" style="display:none;">Warenkorb leeren</button>
+
+        <form action="https://formspree.io/f/mnpjdykk" method="POST" onsubmit="return handleCheckout(event)">
+          <input type="hidden" name="Bestellung" id="hidden-cart-input">
+          <input type="hidden" name="Bezahlt_mit_Guthaben" id
