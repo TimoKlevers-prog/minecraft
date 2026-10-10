@@ -169,4 +169,592 @@
 
         <form action="https://formspree.io/f/mnpjdykk" method="POST" onsubmit="return handleCheckout(event)">
           <input type="hidden" name="Bestellung" id="hidden-cart-input">
-          <input type="hidden" name="Bezahlt_mit_Guthaben" id
+          <input type="hidden" name="Bezahlt_mit_Guthaben" id="hidden-payment-input" value="Nein">
+          
+          <label for="gamertag">Minecraft Name:</label>
+          <input type="text" id="gamertag" name="Gamertag" placeholder="z.B. Steve123" required>
+
+          <label for="coords">Koordinaten / Server-Infos:</label>
+          <input type="text" id="coords" name="Koordinaten" placeholder="z.B. X: 100, Y: 64, Z: -200" required>
+
+          <label for="email">E-Mail-Adresse:</label>
+          <input type="email" id="email" name="Kunden-Email" placeholder="deine@email.de" required>
+
+          <button type="submit" class="btn-order" id="submit-btn" disabled>Bestellung abschicken</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Login Modal -->
+  <div id="login-modal" class="modal">
+    <div class="modal-content">
+      <h3>Konto erstellen oder Anmelden</h3>
+      <label>Dein Minecraft Name:</label>
+      <input type="text" id="modal-user" placeholder="Name eingeben...">
+      <label>Passwort / PIN:</label>
+      <input type="password" id="modal-pass" placeholder="Passwort...">
+      <button class="btn-add" onclick="loginAccount()" style="margin-top: 10px; background-color: #ff9900;">Einloggen / Registrieren</button>
+      <button class="btn-add" onclick="closeLoginModal()" style="background-color: #ddd;">Abbrechen</button>
+    </div>
+  </div>
+
+  <!-- Admin Modal -->
+  <div id="admin-modal" class="modal">
+    <div class="modal-content" style="width: 400px;">
+      <h3>Admin-Bereich</h3>
+      <div id="admin-login-view">
+        <label>Admin-Passwort:</label>
+        <input type="password" id="admin-pass-input" placeholder="Passwort eingeben...">
+        <button class="btn-add" onclick="checkAdminLogin()" style="margin-top: 10px; background-color: #cc0c39; color:white;">Einloggen</button>
+        <button class="btn-add" onclick="closeAdminModal()" style="background-color: #ddd; margin-top:5px;">Schließen</button>
+      </div>
+      <div id="admin-panel-view" style="display:none;">
+        <p style="font-size: 13px; font-weight: bold; margin-bottom: 10px; color: green;">✅ Als Admin eingeloggt</p>
+        <p style="font-size: 12px; margin-bottom: 8px;">Spieler-Guthaben verwalten (Cloud):</p>
+        <div id="admin-users-list" style="max-height: 250px; overflow-y: auto; margin-bottom: 10px;">Lade Benutzer...</div>
+        <button class="btn-add" onclick="saveAdminChanges()" style="background-color: #4CAF50; color:white;">Änderungen speichern</button>
+        <button class="btn-add" onclick="closeAdminModal()" style="background-color: #ddd; margin-top:5px;">Schließen</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const armorEnchants = [
+      { name: "Schutz (Protection)", levels: ["I", "II", "III", "IV"], basePrice: 2, curr: "Diamanten" },
+      { name: "Feuerschutz (Fire Protection)", levels: ["I", "II", "III", "IV"], basePrice: 2, curr: "Diamanten" },
+      { name: "Explosionsschutz (Blast Protection)", levels: ["I", "II", "III", "IV"], basePrice: 2, curr: "Diamanten" },
+      { name: "Schusssicher (Projectiles Protection)", levels: ["I", "II", "III", "IV"], basePrice: 2, curr: "Diamanten" },
+      { name: "Federfall (Feather Falling)", levels: ["I", "II", "III", "IV"], basePrice: 3, curr: "Diamanten" },
+      { name: "Atmung (Respiration)", levels: ["I", "II", "III"], basePrice: 2, curr: "Diamanten" },
+      { name: "Wasseraffinität (Aqua Affinity)", levels: ["I"], basePrice: 2, curr: "Diamanten" },
+      { name: "Dornen (Thorns)", levels: ["I", "II", "III"], basePrice: 3, curr: "Diamanten" },
+      { name: "Wasserläufer (Depth Strider)", levels: ["I", "II", "III"], basePrice: 2, curr: "Diamanten" },
+      { name: "Eisläufer (Frost Walker)", levels: ["I", "II"], basePrice: 3, curr: "Diamanten" },
+      { name: "Seelenschleicher (Soul Speed)", levels: ["I", "II", "III"], basePrice: 3, curr: "Diamanten" },
+      { name: "Schleichgeschwindigkeit (Swift Sneak)", levels: ["I", "II", "III"], basePrice: 4, curr: "Diamanten" }
+    ];
+
+    const weaponEnchants = [
+      { name: "Schärfe (Sharpness)", levels: ["I", "II", "III", "IV", "V"], basePrice: 2, curr: "Diamanten" },
+      { name: "Nemesis der Gliederfüßer", levels: ["I", "II", "III", "IV", "V"], basePrice: 1, curr: "Diamanten" },
+      { name: "Ausräuchern (Smite)", levels: ["I", "II", "III", "IV", "V"], basePrice: 2, curr: "Diamanten" },
+      { name: "Rückstoß (Knockback)", levels: ["I", "II"], basePrice: 2, curr: "Diamanten" },
+      { name: "Plünderung (Looting)", levels: ["I", "II", "III"], basePrice: 3, curr: "Diamanten" },
+      { name: "Schwungbedeckung (Sweeping Edge)", levels: ["I", "II", "III"], basePrice: 2, curr: "Diamanten" },
+      { name: "Verbrennung (Fire Aspect)", levels: ["I", "II"], basePrice: 3, curr: "Diamanten" },
+      { name: "Dichte (Density) [Keule]", levels: ["I", "II", "III", "IV", "V"], basePrice: 3, curr: "Diamanten" },
+      { name: "Bruch (Breach) [Keule]", levels: ["I", "II", "III", "IV"], basePrice: 3, curr: "Diamanten" },
+      { name: "Windstoß (Wind Burst) [Keule]", levels: ["I", "II", "III"], basePrice: 5, curr: "Diamanten" }
+    ];
+
+    const toolEnchants = [
+      { name: "Effizienz (Efficiency)", levels: ["I", "II", "III", "IV", "V"], basePrice: 2, curr: "Diamanten" },
+      { name: "Behutsamkeit (Silk Touch)", levels: ["I"], basePrice: 4, curr: "Diamanten" },
+      { name: "Glück (Fortune)", levels: ["I", "II", "III"], basePrice: 3, curr: "Diamanten" },
+      { name: "Ködermagie (Lure)", levels: ["I", "II", "III"], basePrice: 1, curr: "Diamanten" },
+      { name: "Glück des Meeres (Luck of the Sea)", levels: ["I", "II", "III"], basePrice: 2, curr: "Diamanten" }
+    ];
+
+    const bowEnchants = [
+      { name: "Stärke (Power)", levels: ["I", "II", "III", "IV", "V"], basePrice: 2, curr: "Diamanten" },
+      { name: "Schlag (Punch)", levels: ["I", "II"], basePrice: 2, curr: "Diamanten" },
+      { name: "Flamme (Flame)", levels: ["I"], basePrice: 3, curr: "Diamanten" },
+      { name: "Unendlichkeit (Infinity)", levels: ["I"], basePrice: 5, curr: "Diamanten" },
+      { name: "Schnellladen (Quick Charge)", levels: ["I", "II", "III"], basePrice: 2, curr: "Diamanten" },
+      { name: "Mehrfachschuss (Multishot)", levels: ["I"], basePrice: 3, curr: "Diamanten" },
+      { name: "Durchschuss (Piercing)", levels: ["I", "II", "III", "IV"], basePrice: 2, curr: "Diamanten" }
+    ];
+
+    const tridentEnchants = [
+      { name: "Sog (Riptide)", levels: ["I", "II", "III"], basePrice: 3, curr: "Diamanten" },
+      { name: "Treue (Loyalty)", levels: ["I", "II", "III"], basePrice: 3, curr: "Diamanten" },
+      { name: "Entladung (Channeling)", levels: ["I"], basePrice: 4, curr: "Diamanten" },
+      { name: "Harpune (Impaling)", levels: ["I", "II", "III", "IV", "V"], basePrice: 2, curr: "Diamanten" }
+    ];
+
+    const universalEnchants = [
+      { name: "Haltbarkeit (Unbreaking)", levels: ["I", "II", "III"], basePrice: 2, curr: "Diamanten" },
+      { name: "Reparatur (Mending)", levels: ["I"], basePrice: 6, curr: "Diamanten" },
+      { name: "Fluch des Verschwindens", levels: ["I"], basePrice: 1, curr: "Eisen" },
+      { name: "Fluch der Bindung", levels: ["I"], basePrice: 1, curr: "Eisen" }
+    ];
+
+    let products = [];
+    let idCounter = 1;
+
+    function addEnchants(list) {
+      list.forEach(e => {
+        e.levels.forEach((lvl, idx) => {
+          let multiplier = idx + 1;
+          products.push({ id: idCounter++, name: `Buch: ${e.name} ${lvl}`, priceNum: e.basePrice * multiplier, curr: e.curr, category: "ench", icon: "📜" });
+        });
+      });
+    }
+
+    addEnchants(armorEnchants);
+    addEnchants(weaponEnchants);
+    addEnchants(toolEnchants);
+    addEnchants(bowEnchants);
+    addEnchants(tridentEnchants);
+    addEnchants(universalEnchants);
+
+    const additionalItems = [
+      { name: "Zaubertisch", priceNum: 4, curr: "Diamanten", category: "ench", icon: "🔮" },
+      { name: "Eichenholz Stamm", priceNum: 1, curr: "Eisen", category: "bau", icon: "🪵" },
+      { name: "Fichtenholz Stamm", priceNum: 1, curr: "Eisen", category: "bau", icon: "🪵" },
+      { name: "Birkenholz Stamm", priceNum: 1, curr: "Eisen", category: "bau", icon: "🪵" },
+      { name: "Tropenholz Stamm", priceNum: 1, curr: "Eisen", category: "bau", icon: "🪵" },
+      { name: "Akazienholz Stamm", priceNum: 1, curr: "Eisen", category: "bau", icon: "🪵" },
+      { name: "Schwarzeichen Stamm", priceNum: 1, curr: "Eisen", category: "bau", icon: "🪵" },
+      { name: "Mangroven Stamm", priceNum: 2, curr: "Eisen", category: "bau", icon: "🪵" },
+      { name: "Kirschholz Stamm", priceNum: 2, curr: "Eisen", category: "bau", icon: "🌸" },
+      { name: "Blasses Holz Stamm", priceNum: 2, curr: "Eisen", category: "bau", icon: "⚪" },
+      { name: "Bambusblock", priceNum: 1, curr: "Eisen", category: "bau", icon: "🎋" },
+      { name: "Karmesinstamm", priceNum: 2, curr: "Eisen", category: "bau", icon: "🔴" },
+      { name: "Wirrstamm", priceNum: 2, curr: "Eisen", category: "bau", icon: "🔵" },
+      { name: "Holzbretter", priceNum: 1, curr: "Eisen", category: "bau", icon: "🪵" },
+      { name: "Holzzaun", priceNum: 1, curr: "Eisen", category: "bau", icon: "🪵" },
+      { name: "Zauntor", priceNum: 1, curr: "Eisen", category: "bau", icon: "🚪" },
+      { name: "Holztür", priceNum: 1, curr: "Eisen", category: "bau", icon: "🚪" },
+      { name: "Falltür", priceNum: 1, curr: "Eisen", category: "bau", icon: "🚪" },
+      { name: "Bruchstein (Cobblestone)", priceNum: 1, curr: "Eisen", category: "bau", icon: "🪨" },
+      { name: "Glatter Stein", priceNum: 1, curr: "Eisen", category: "bau", icon: "🪨" },
+      { name: "Granit (Poliert)", priceNum: 1, curr: "Eisen", category: "bau", icon: "🧱" },
+      { name: "Diorit (Poliert)", priceNum: 1, curr: "Eisen", category: "bau", icon: "🧱" },
+      { name: "Andesit (Poliert)", priceNum: 1, curr: "Eisen", category: "bau", icon: "🧱" },
+      { name: "Tuff", priceNum: 1, curr: "Eisen", category: "bau", icon: "🪨" },
+      { name: "Tiefenschiefer (Poliert)", priceNum: 1, curr: "Eisen", category: "bau", icon: "🖤" },
+      { name: "Schwarzstein", priceNum: 1, curr: "Eisen", category: "bau", icon: "⬛" },
+      { name: "Basalt", priceNum: 1, curr: "Eisen", category: "bau", icon: "🪵" },
+      { name: "Obsidian", priceNum: 2, curr: "Eisen", category: "bau", icon: "🔮" },
+      { name: "Kohleblock", priceNum: 2, curr: "Eisen", category: "bau", icon: "⬛" },
+      { name: "Goldblock", priceNum: 5, curr: "Eisen", category: "bau", icon: "🟨" },
+      { name: "Lapis Lazuliblock", priceNum: 2, curr: "Eisen", category: "bau", icon: "🟦" },
+      { name: "Redstone-Block", priceNum: 2, curr: "Eisen", category: "bau", icon: "🟥" },
+      { name: "Smaragdblock", priceNum: 3, curr: "Diamanten", category: "bau", icon: "🟩" },
+      { name: "Netheritblock", priceNum: 35, curr: "Diamanten", category: "bau", icon: "⬛" },
+      { name: "Kupferblock", priceNum: 2, curr: "Eisen", category: "bau", icon: "🟧" },
+      { name: "Quarzblock", priceNum: 2, curr: "Eisen", category: "bau", icon: "🏛️" },
+      { name: "Antiker Schrott (Debris)", priceNum: 4, curr: "Diamanten", category: "bau", icon: "🔥" },
+      { name: "Glas", priceNum: 1, curr: "Eisen", category: "bau", icon: "🪟" },
+      { name: "Buntglas", priceNum: 1, curr: "Eisen", category: "bau", icon: "🪟" },
+      { name: "Keramik", priceNum: 1, curr: "Eisen", category: "bau", icon: "🎨" },
+      { name: "Glasierte Keramik", priceNum: 1, curr: "Eisen", category: "bau", icon: "🎨" },
+      { name: "Erde", priceNum: 1, curr: "Eisen", category: "bau", icon: "🌱" },
+      { name: "Grasblock", priceNum: 1, curr: "Eisen", category: "bau", icon: "🌱" },
+      { name: "Moosblock", priceNum: 1, curr: "Eisen", category: "bau", icon: "🌱" },
+      { name: "Myzel", priceNum: 2, curr: "Eisen", category: "bau", icon: "🍄" },
+      { name: "Podsol", priceNum: 2, curr: "Eisen", category: "bau", icon: "🍄" },
+      { name: "Sand", priceNum: 1, curr: "Eisen", category: "bau", icon: "⏳" },
+      { name: "Roter Sand", priceNum: 1, curr: "Eisen", category: "bau", icon: "⏳" },
+      { name: "Kies", priceNum: 1, curr: "Eisen", category: "bau", icon: "⏳" },
+      { name: "Schwamm", priceNum: 3, curr: "Eisen", category: "bau", icon: "🧽" },
+      { name: "Netherrack", priceNum: 1, curr: "Eisen", category: "bau", icon: "🔥" },
+      { name: "Endstein", priceNum: 1, curr: "Eisen", category: "bau", icon: "🟡" },
+      { name: "Purpurblock", priceNum: 1, curr: "Eisen", category: "bau", icon: "🟪" },
+      { name: "Redstone-Staub", priceNum: 1, curr: "Eisen", category: "redstone", icon: "🔴" },
+      { name: "Redstone-Fackel", priceNum: 1, curr: "Eisen", category: "redstone", icon: "🕯️" },
+      { name: "Redstone-Verstärker", priceNum: 2, curr: "Eisen", category: "redstone", icon: "⏱️" },
+      { name: "Redstone-Vergleicher", priceNum: 3, curr: "Eisen", category: "redstone", icon: "📐" },
+      { name: "Kolben (Piston)", priceNum: 2, curr: "Eisen", category: "redstone", icon: "📦" },
+      { name: "Klebriger Kolben", priceNum: 3, curr: "Eisen", category: "redstone", icon: "🟢" },
+      { name: "Spender", priceNum: 3, curr: "Eisen", category: "redstone", icon: "🏹" },
+      { name: "Werfer", priceNum: 3, curr: "Eisen", category: "redstone", icon: "🏹" },
+      { name: "Trichter (Hopper)", priceNum: 4, curr: "Eisen", category: "redstone", icon: "🔻" },
+      { name: "Beobachter (Observer)", priceNum: 2, curr: "Eisen", category: "redstone", icon: "👁️" },
+      { name: "Tageslichtsensor", priceNum: 2, curr: "Eisen", category: "redstone", icon: "☀️" },
+      { name: "Auslöser", priceNum: 2, curr: "Eisen", category: "redstone", icon: "☀️" },
+      { name: "Notenblock", priceNum: 2, curr: "Eisen", category: "redstone", icon: "💡" },
+      { name: "Redstone-Lampe", priceNum: 2, curr: "Eisen", category: "redstone", icon: "💡" },
+      { name: "Schalter", priceNum: 1, curr: "Eisen", category: "redstone", icon: "🔘" },
+      { name: "Druckplatte", priceNum: 1, curr: "Eisen", category: "redstone", icon: "🔘" },
+      { name: "Holz Werkzeugset", priceNum: 1, curr: "Eisen", category: "tools", icon: "🪨" },
+      { name: "Stein Werkzeugset", priceNum: 1, curr: "Eisen", category: "tools", icon: "🪨" },
+      { name: "Goldene Spitzhacke", priceNum: 2, curr: "Eisen", category: "tools", icon: "🥇" },
+      { name: "Goldenes Schwert", priceNum: 2, curr: "Eisen", category: "tools", icon: "🥇" },
+      { name: "Netherit Schwert", priceNum: 10, curr: "Diamanten", category: "tools", icon: "⚔️" },
+      { name: "Netherit Spitzhacke", priceNum: 14, curr: "Diamanten", category: "tools", icon: "⛏️" },
+      { name: "Netherit Axt", priceNum: 14, curr: "Diamanten", category: "tools", icon: "🪓" },
+      { name: "Netherit Schaufel", priceNum: 8, curr: "Diamanten", category: "tools", icon: "🪒" },
+      { name: "Netherit Hacke", priceNum: 8, curr: "Diamanten", category: "tools", icon: "🌾" },
+      { name: "Netherithelm", priceNum: 12, curr: "Diamanten", category: "tools", icon: "🪖" },
+      { name: "Netheritbrustplatte", priceNum: 16, curr: "Diamanten", category: "tools", icon: "🛡️" },
+      { name: "Netherithose", priceNum: 14, curr: "Diamanten", category: "tools", icon: "👖" },
+      { name: "Netheritstiefel", priceNum: 10, curr: "Diamanten", category: "tools", icon: "🥾" },
+      { name: "Leder Rüstungsset", priceNum: 2, curr: "Eisen", category: "tools", icon: "🥋" },
+      { name: "Kettenrüstung Set", priceNum: 6, curr: "Eisen", category: "tools", icon: "⛓️" },
+      { name: "Gold Rüstungsset", priceNum: 4, curr: "Eisen", category: "tools", icon: "👑" },
+      { name: "Schildkrötenpanzer Helm", priceNum: 5, curr: "Eisen", category: "tools", icon: "🐢" },
+      { name: "Bogen", priceNum: 2, curr: "Eisen", category: "tools", icon: "🏹" },
+      { name: "Armbrust", priceNum: 2, curr: "Eisen", category: "tools", icon: "🏹" },
+      { name: "Dreizack (Trident)", priceNum: 12, curr: "Diamanten", category: "tools", icon: "🔱" },
+      { name: "Keule (Mace)", priceNum: 20, curr: "Diamanten", category: "tools", icon: "🔨" },
+      { name: "Schild", priceNum: 2, curr: "Eisen", category: "tools", icon: "🛡️" },
+      { name: "Fernglas", priceNum: 2, curr: "Eisen", category: "tools", icon: "🔍" },
+      { name: "Pinsel", priceNum: 1, curr: "Eisen", category: "tools", icon: "🖌️" },
+      { name: "Angel", priceNum: 1, curr: "Eisen", category: "tools", icon: "🎣" },
+      { name: "Karottenrute", priceNum: 1, curr: "Eisen", category: "tools", icon: "🥕" },
+      { name: "Elytra", priceNum: 18, curr: "Diamanten", category: "tools", icon: "🪽" },
+      { name: "Apfel", priceNum: 1, curr: "Eisen", category: "food", icon: "🍎" },
+      { name: "Beeren", priceNum: 1, curr: "Eisen", category: "food", icon: "🫐" },
+      { name: "Goldener Apfel", priceNum: 3, curr: "Diamanten", category: "food", icon: "🍏" },
+      { name: "Verzauberter Goldener Apfel", priceNum: 12, curr: "Diamanten", category: "food", icon: "✨" },
+      { name: "Karotte", priceNum: 1, curr: "Eisen", category: "food", icon: "🥕" },
+      { name: "Kartoffel", priceNum: 1, curr: "Eisen", category: "food", icon: "🥔" },
+      { name: "Rübe", priceNum: 1, curr: "Eisen", category: "food", icon: "🧅" },
+      { name: "Brot", priceNum: 1, curr: "Eisen", category: "food", icon: "🍞" },
+      { name: "Keks", priceNum: 1, curr: "Eisen", category: "food", icon: "🍪" },
+      { name: "Kuchen", priceNum: 2, curr: "Eisen", category: "food", icon: "🎂" },
+      { name: "Gegartes Fleisch", priceNum: 1, curr: "Eisen", category: "food", icon: "🥩" },
+      { name: "Fisch (Kabeljau)", priceNum: 1, curr: "Eisen", category: "food", icon: "🐟" },
+      { name: "Fisch (Lachs)", priceNum: 1, curr: "Eisen", category: "food", icon: "🐟" },
+      { name: "Braustand", priceNum: 2, curr: "Eisen", category: "brew", icon: "🧪" },
+      { name: "Kessel", priceNum: 2, curr: "Eisen", category: "brew", icon: "🧪" },
+      { name: "Netherwarze", priceNum: 2, curr: "Eisen", category: "brew", icon: "🔥" },
+      { name: "Lohenstaub", priceNum: 2, curr: "Eisen", category: "brew", icon: "🔥" },
+      { name: "Trank der Regeneration", priceNum: 2, curr: "Eisen", category: "brew", icon: "🧪" },
+      { name: "Trank der Schnelligkeit", priceNum: 2, curr: "Eisen", category: "brew", icon: "🧪" },
+      { name: "Trank des Feuerschutzes", priceNum: 2, curr: "Eisen", category: "brew", icon: "🧪" },
+      { name: "Trank der Stärke", priceNum: 2, curr: "Eisen", category: "brew", icon: "🧪" },
+      { name: "Wurftrank", priceNum: 3, curr: "Eisen", category: "brew", icon: "💥" },
+      { name: "Verweildauer-Trank", priceNum: 3, curr: "Eisen", category: "brew", icon: "💥" },
+      { name: "Enderperle", priceNum: 1, curr: "Eisen", category: "craft", icon: "🔮" },
+      { name: "Schleimball", priceNum: 1, curr: "Eisen", category: "craft", icon: "🟢" },
+      { name: "Netherstern", priceNum: 15, curr: "Diamanten", category: "craft", icon: "⭐" },
+      { name: "Nautilus-Schale", priceNum: 2, curr: "Diamanten", category: "craft", icon: "🐚" },
+      { name: "Herz des Meeres", priceNum: 4, curr: "Diamanten", category: "craft", icon: "💙" },
+      { name: "Töpferscherben", priceNum: 2, curr: "Eisen", category: "craft", icon: "🏺" },
+      { name: "Rüstungsbesatz-Schablone (Trim)", priceNum: 5, curr: "Diamanten", category: "craft", icon: "📜" }
+    ];
+
+    additionalItems.forEach(item => {
+      products.push({ id: idCounter++, name: item.name, priceNum: item.priceNum, curr: item.curr, category: item.category, icon: item.icon });
+    });
+
+    let cart = [];
+    let currentUser = null;
+    let cloudAccounts = {};
+
+    window.initShop = async function() {
+      currentUser = localStorage.getItem('minezone_current_user') || null;
+      await loadAccountsFromCloud();
+      updateAccountUI();
+      displayProducts(products);
+    };
+
+    async function loadAccountsFromCloud() {
+      try {
+        const querySnapshot = await window.getDocs(window.collection(window.db, "accounts"));
+        cloudAccounts = {};
+        querySnapshot.forEach((docSnap) => {
+          cloudAccounts[docSnap.id] = docSnap.data();
+        });
+      } catch (e) {
+        console.error("Fehler beim Laden der Cloud:", e);
+      }
+    }
+
+    function openLoginModal() { document.getElementById('login-modal').style.display = 'flex'; }
+    function closeLoginModal() { document.getElementById('login-modal').style.display = 'none'; }
+    
+    async function loginAccount() {
+      const username = document.getElementById('modal-user').value.trim();
+      if (!username) { alert('Bitte Namen eingeben!'); return; }
+
+      const userDocRef = window.doc(window.db, "accounts", username);
+      const userSnap = await window.getDoc(userDocRef);
+
+      if (!userSnap.exists()) {
+        await window.setDoc(userDocRef, { iron: 0, diamonds: 0 });
+      }
+
+      currentUser = username;
+      localStorage.setItem('minezone_current_user', currentUser);
+      await loadAccountsFromCloud();
+
+      closeLoginModal();
+      updateAccountUI();
+      document.getElementById('gamertag').value = currentUser;
+    }
+
+    function logout() {
+      currentUser = null;
+      localStorage.removeItem('minezone_current_user');
+      updateAccountUI();
+    }
+
+    async function updateAccountUI() {
+      currentUser = localStorage.getItem('minezone_current_user');
+      const info = document.getElementById('account-info');
+      const btn = document.getElementById('account-btn');
+      const walletBox = document.getElementById('wallet-box');
+
+      if (currentUser) {
+        await loadAccountsFromCloud();
+        let acc = cloudAccounts[currentUser] || { iron: 0, diamonds: 0 };
+        
+        info.innerText = `Konto: ${currentUser}`;
+        btn.style.display = 'none';
+        walletBox.style.display = 'block';
+        document.getElementById('bank-iron').innerText = acc.iron;
+        document.getElementById('bank-diamonds').innerText = acc.diamonds;
+        document.getElementById('gamertag').value = currentUser;
+      } else {
+        info.innerText = 'Nicht eingeloggt';
+        btn.style.display = 'inline-block';
+        walletBox.style.display = 'none';
+      }
+      renderCart();
+    }
+
+    function openAdminModal() {
+      document.getElementById('admin-modal').style.display = 'flex';
+      document.getElementById('admin-pass-input').value = '';
+      document.getElementById('admin-login-view').style.display = 'block';
+      document.getElementById('admin-panel-view').style.display = 'none';
+    }
+    function closeAdminModal() { document.getElementById('admin-modal').style.display = 'none'; }
+
+    async function checkAdminLogin() {
+      const pass = document.getElementById('admin-pass-input').value;
+      if (pass === "timo123") {
+        document.getElementById('admin-login-view').style.display = 'none';
+        document.getElementById('admin-panel-view').style.display = 'block';
+        await loadAdminUsers();
+      } else {
+        alert("Falsches Admin-Passwort!");
+      }
+    }
+
+    async function loadAdminUsers() {
+      await loadAccountsFromCloud();
+      let listDiv = document.getElementById('admin-users-list');
+      listDiv.innerHTML = '';
+
+      if (Object.keys(cloudAccounts).length === 0) {
+        listDiv.innerHTML = '<p style="font-size:12px; color:#777;">Keine Benutzer in der Cloud gefunden.</p>';
+        return;
+      }
+
+      for (let user in cloudAccounts) {
+        let row = document.createElement('div');
+        row.className = 'admin-user-row';
+        row.innerHTML = `
+          <span><b>${user}</b></span>
+          <div>
+            ⚙️ <input type="number" id="adm-iron-${user}" value="${cloudAccounts[user].iron}"> 
+            💎 <input type="number" id="adm-diam-${user}" value="${cloudAccounts[user].diamonds}">
+          </div>
+        `;
+        listDiv.appendChild(row);
+      }
+    }
+
+    async function saveAdminChanges() {
+      for (let user in cloudAccounts) {
+        let ironVal = parseInt(document.getElementById(`adm-iron-${user}`).value, 10);
+        let diamVal = parseInt(document.getElementById(`adm-diam-${user}`).value, 10);
+        
+        let newIron = isNaN(ironVal) ? 0 : ironVal;
+        let newDiam = isNaN(diamVal) ? 0 : diamVal;
+
+        const userRef = window.doc(window.db, "accounts", user);
+        await window.updateDoc(userRef, { iron: newIron, diamonds: newDiam });
+      }
+      await loadAccountsFromCloud();
+      alert("Cloud-Guthaben erfolgreich aktualisiert!");
+      closeAdminModal();
+      updateAccountUI();
+    }
+
+    function getHourlyDeals() {
+      const currentHour = new Date().getHours();
+      let dealIndices = [];
+      for(let i = 0; i < 8; i++) {
+        let index = (currentHour * 13 + i * 29) % products.length;
+        dealIndices.push(index);
+      }
+      return dealIndices;
+    }
+
+    function displayProducts(items) {
+      const grid = document.getElementById('product-grid');
+      const noResults = document.getElementById('no-results');
+      grid.innerHTML = '';
+
+      if (!items || items.length === 0) {
+        noResults.style.display = 'block';
+        return;
+      }
+      noResults.style.display = 'none';
+
+      const hourlyDeals = getHourlyDeals();
+
+      items.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+
+        let isHourlyDeal = hourlyDeals.includes(p.id - 1);
+        let effectivePrice = p.priceNum;
+        let badge = '';
+        let priceHTML = '';
+
+        if (isHourlyDeal && p.priceNum > 1) {
+          effectivePrice = Math.max(1, Math.floor(p.priceNum * 0.7));
+          badge = `<div class="deal-badge">STÜNDLICHER DEAL</div>`;
+          priceHTML = `<span class="old-price">${p.priceNum}x ${p.curr}</span><span class="current-price">${effectivePrice}x ${p.curr} / Stk.</span>`;
+        } else {
+          priceHTML = `<span class="current-price">${p.priceNum}x ${p.curr} / Stk.</span>`;
+        }
+
+        card.innerHTML = `
+          ${badge}
+          <div>
+            <div class="product-icon">${p.icon}</div>
+            <div class="product-title">${p.name}</div>
+            <div class="price-box">${priceHTML}</div>
+          </div>
+          <div>
+            <div class="qty-box">
+              <label for="qty-${p.id}">Menge:</label>
+              <input type="number" id="qty-${p.id}" value="1" min="1" max="64" onchange="validateQty(this)">
+            </div>
+            <button class="btn-add" onclick="addToCart(${p.id}, ${effectivePrice})">In den Einkaufswagen</button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function validateQty(input) {
+      let val = parseInt(input.value, 10);
+      if (isNaN(val) || val < 1) input.value = 1;
+      if (val > 64) input.value = 64;
+    }
+
+    function addToCart(productId, unitPrice) {
+      const p = products.find(prod => prod.id === productId);
+      const qtyInput = document.getElementById(`qty-${productId}`);
+      let qty = parseInt(qtyInput.value, 10);
+
+      if (isNaN(qty) || qty < 1) qty = 1;
+      if (qty > 64) qty = 64;
+
+      cart.push({ name: p.name, qty: qty, priceNum: unitPrice * qty, curr: p.curr });
+      renderCart();
+    }
+
+    function clearCart() {
+      cart = [];
+      renderCart();
+    }
+
+    function renderCart() {
+      const cartItemsDiv = document.getElementById('cart-items');
+      const hiddenInput = document.getElementById('hidden-cart-input');
+      const submitBtn = document.getElementById('submit-btn');
+      const clearCartBtn = document.getElementById('clear-cart-btn');
+
+      if (cart.length === 0) {
+        cartItemsDiv.innerHTML = '<p style="color: #777; font-size: 13px;">Dein Einkaufswagen ist leer.</p>';
+        submitBtn.disabled = true;
+        hiddenInput.value = '';
+        clearCartBtn.style.display = 'none';
+        return;
+      }
+
+      clearCartBtn.style.display = 'block';
+      cartItemsDiv.innerHTML = '';
+      let summaryText = [];
+      let totalIron = 0;
+      let totalDiamonds = 0;
+
+      cart.forEach((item) => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'cart-item';
+        itemDiv.innerHTML = `<span>${item.qty}x ${item.name}</span> <b>${item.priceNum}x ${item.curr}</b>`;
+        cartItemsDiv.appendChild(itemDiv);
+        summaryText.push(`${item.qty}x ${item.name} -> ${item.priceNum}x ${item.curr}`);
+
+        if (item.curr === 'Eisen') totalIron += item.priceNum;
+        if (item.curr === 'Diamanten') totalDiamonds += item.priceNum;
+      });
+
+      hiddenInput.value = summaryText.join(' | ');
+      
+      if (currentUser) {
+        let acc = cloudAccounts[currentUser] || { iron: 0, diamonds: 0 };
+        if (acc.iron >= totalIron && acc.diamonds >= totalDiamonds) {
+          submitBtn.disabled = false;
+          submitBtn.innerText = "Mit Guthaben bezahlen";
+          document.getElementById('hidden-payment-input').value = `Ja (Abgezogen: ${totalIron} Eisen, ${totalDiamonds} Diamanten)`;
+        } else {
+          submitBtn.disabled = true;
+          submitBtn.innerText = "Nicht genug Guthaben!";
+        }
+      } else {
+        submitBtn.disabled = false;
+        submitBtn.innerText = "Bestellung abschicken";
+      }
+    }
+
+    async function handleCheckout(event) {
+      if (currentUser) {
+        let totalIron = 0;
+        let totalDiamonds = 0;
+        cart.forEach(item => {
+          if (item.curr === 'Eisen') totalIron += item.priceNum;
+          if (item.curr === 'Diamanten') totalDiamonds += item.priceNum;
+        });
+
+        let acc = cloudAccounts[currentUser];
+        let newIron = acc.iron - totalIron;
+        let newDiam = acc.diamonds - totalDiamonds;
+
+        const userRef = window.doc(window.db, "accounts", currentUser);
+        await window.updateDoc(userRef, { iron: newIron, diamonds: newDiam });
+        await updateAccountUI();
+      }
+      return true;
+    }
+
+    function filterCategory(cat) {
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      const title = document.getElementById('grid-title');
+      document.getElementById('search-input').value = '';
+
+      if (cat === 'all') {
+        document.getElementById('btn-all').classList.add('active');
+        title.innerText = "Alle Items";
+        displayProducts(products);
+      } else if (cat === 'deals') {
+        document.getElementById('btn-deals').classList.add('active');
+        title.innerText = "🔥 Angebote des Tages (Wechseln stündlich!)";
+        const hourlyDeals = getHourlyDeals();
+        displayProducts(products.filter(p => hourlyDeals.includes(p.id - 1)));
+      } else {
+        const btn = document.getElementById(`btn-${cat}`);
+        if(btn) btn.classList.add('active');
+        displayProducts(products.filter(p => p.category === cat));
+      }
+    }
+
+    function performSearch() {
+      const query = document.getElementById('search-input').value.toLowerCase().trim();
+      const title = document.getElementById('grid-title');
+
+      if (!query) {
+        displayProducts(products);
+        title.innerText = "Alle Items";
+        return;
+      }
+
+      const filtered = products.filter(p => p.name.toLowerCase().includes(query));
+      title.innerText = `Suchergebnisse für "${query}" (${filtered.length})`;
+      displayProducts(filtered);
+    }
+  </script>
+
+</body>
+</html>
